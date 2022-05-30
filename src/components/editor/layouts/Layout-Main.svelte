@@ -1,7 +1,7 @@
 <section>
     <!-- title class: custom style for titles -->
-    <h3 class="title" contenteditable="true">Write your title here</h3>
+    <h3 class="title" contenteditable="true">Title</h3>
 
     <!-- subtitle class: custom style for subtitles -->
-    <p class="subtitle" contenteditable="true">Write your subtitle here</p>
+    <p class="subtitle" contenteditable="true">Subtitle</p>
 </section>

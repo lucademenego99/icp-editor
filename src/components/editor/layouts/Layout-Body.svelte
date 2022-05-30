@@ -11,7 +11,7 @@
         if (value == 1) {
             // Create a p element and append it to the body
             const p = document.createElement("p");
-            p.innerHTML = "Hello World";
+            p.innerHTML = "Text";
             p.contentEditable = "true";
             body.appendChild(p);
         } else if (value == 2) {
@@ -20,7 +20,7 @@
             container.style.height = "100%";
             container.style.width = "100%";
             container.innerHTML = `
-<base-editor contenteditable="true" language="python" theme="dark" type="vertical" style="height: 100%;" code="print('Write your code here!')" />
+<base-editor contenteditable="true" language="python" theme="dark" type="vertical" style="height: 100%; box-sizing: border-box;" code="print('Write your code!')" />
             `;
             body.appendChild(container);
         }
@@ -31,11 +31,11 @@
 
 <section>
     <!-- title class: custom style for titles -->
-    <h3 class="title" contenteditable="true">Write your title here</h3>
+    <h3 class="title" contenteditable="true">Title</h3>
 
     <div
         bind:this={body}
-        style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center;"
+        style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center; overflow: auto;"
         class={isContentUndefined ? "undefined" : ""}
     >
         {#if isContentUndefined}
@@ -52,6 +52,6 @@
     }
 
     .undefined {
-        border: 4px solid #aa2233;
+        border: 2px solid #aa2233;
     }
 </style>

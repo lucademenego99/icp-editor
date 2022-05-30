@@ -25,7 +25,7 @@
             container.style.alignItems = "center";
             // Create a p element and append it to the body
             const p = document.createElement("p");
-            p.innerText = "Write your text here";
+            p.innerText = "Text";
             p.contentEditable = "true";
             container.appendChild(p);
             col.appendChild(container);
@@ -37,7 +37,7 @@
             const type =
                 col.clientHeight > col.clientWidth ? "" : "type='vertical'";
             container.innerHTML = `
-<base-editor contenteditable="true" language="python" theme="dark" ${type} style="height: 100%;" code="print('Write your code here!')" />
+<base-editor contenteditable="true" language="python" theme="dark" ${type} style="height: 100%; box-sizing: border-box;" code="print('Write your code!')" />
             `;
             col.appendChild(container);
         }
@@ -47,7 +47,7 @@
 </script>
 
 <section>
-    <h3 class="title" contenteditable="true">Write your title here</h3>
+    <h3 class="title" contenteditable="true">Title</h3>
 
     <div
         style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center"
@@ -55,7 +55,7 @@
         <div class="row" style="width: 100%; height: 100%;">
             <div bind:this={col1} class="col" style="flex: 1;">
                 <div
-                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"
+                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
                     class={isContentCol1Undefined ? "undefined" : ""}
                 >
                     {#if isContentCol1Undefined}
@@ -69,7 +69,7 @@
             </div>
             <div bind:this={col2} class="col" style="flex: 1;">
                 <div
-                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"
+                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
                     class={isContentCol2Undefined ? "undefined" : ""}
                 >
                     {#if isContentCol2Undefined}
@@ -93,11 +93,12 @@
     .col {
         width: 100%;
         height: 100%;
+        overflow: auto;
     }
 
     .undefined {
         width: 100%;
         height: 100%;
-        border: 4px solid #aa2233;
+        border: 2px solid #aa2233;
     }
 </style>
