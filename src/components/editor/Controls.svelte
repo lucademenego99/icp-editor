@@ -1,26 +1,16 @@
+<script lang="ts">
+import { Layouts } from "../../types";
+
+    import { revealSlides } from "../../stores";
+
+    const newSlide = () => {
+		$revealSlides = [...$revealSlides, Layouts.BODY];
+	};
+</script>
+
 <aside class="overview">
-    <div class="buttons">
-        <img
-            class="action-image"
-            style="transform: rotate(90deg)"
-            src="/assets/Previous.png"
-            alt=""
-            srcset=""
-        />
-    </div>
-    <div class="buttons">
-        <img class="action-image" src="/assets/Previous.png" alt="" srcset="" />
-        <img class="action-image" src="/assets/Next.png" alt="" srcset="" />
-    </div>
-    <div class="buttons">
-        <img
-            class="action-image"
-            style="transform: rotate(-90deg)"
-            src="/assets/Previous.png"
-            alt=""
-            srcset=""
-        />
-    </div>
+    <button on:click="{newSlide}">New Slide</button>
+    <button>New vertical Slide</button>
 </aside>
 
 <style>
@@ -37,13 +27,5 @@
         justify-content: center;
         gap: 1em;
         overflow-y: auto;
-    }
-
-    .buttons {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 5em;
     }
 </style>

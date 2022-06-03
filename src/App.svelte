@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Navbar from "./components/Navbar/Navbar.svelte";
+	import Navbar from "./components/navbar/Navbar.svelte";
 	import Editor from "./components/editor/Editor.svelte";
 </script>
 
@@ -14,6 +14,7 @@
 		rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.css"
 	/>
+	<!-- <link rel="stylesheet" href="reveal.css"> -->
 
 	<!-- Blood Reveal Theme Stylesheet -->
 	<link
@@ -22,8 +23,12 @@
 		id="theme"
 	/>
 
+	<!-- <link rel="stylesheet" href="blood.css"> -->
+
 	<script
 		src="https://unpkg.com/icp-bundle@0.0.6/dist/base/icp-bundle.umd.js"></script>
+	
+		<!-- <script src="icp-bundle.umd.js"></script> -->
 
 	<!-- Custom stylesheet to make reveal work with our playgrounds -->
 	<link rel="stylesheet" href="custom-styles.css" />
@@ -64,10 +69,6 @@
 			background-color: #c3073f;
 		}
 	</style>
-
-	<!-- Import the main reveal script -->
-	<!-- <script src=" https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.js">
-	</script> -->
 </svelte:head>
 
 <style>

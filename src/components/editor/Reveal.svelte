@@ -1,11 +1,26 @@
 <!-- Initialize reveal -->
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import Reveal from "reveal.js";
 
     import LayoutMain from "./layouts/Layout-Main.svelte";
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
+
+    import { RevealInstance, revealSlides } from "../../stores";
+    import { Layouts } from "../../types";
+
+    let slides: Layouts[];
+
+    // Update the slides variable based on the store's value
+	revealSlides.subscribe(value => {
+		slides = value;
+	});
+
+    // If the slides changed and Reveal is ready, go to the last slide
+    $: if (slides && Reveal.next) {
+        setTimeout(() => {Reveal.slide(Reveal.getSlides().length - 1)}, 50);
+    }
 
     onMount(() => {
         Reveal.initialize({
@@ -37,6 +52,8 @@
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
         });
+
+        $RevealInstance = Reveal;
     });
 </script>
 
@@ -52,9 +69,15 @@
         data-background-transition="fade"
     >
         <div class="slides">
-            <LayoutMain />
-            <LayoutBody />
-            <LayoutColumns />
+            {#each slides as slide}
+                {#if slide == Layouts.BODY}
+                    <LayoutBody />
+                {:else if slide == Layouts.MAIN}
+                    <LayoutMain />
+                {:else if slide == Layouts.COLUMNS}
+                    <LayoutColumns />
+                {/if}
+            {/each}
         </div>
     </div>
 </div>

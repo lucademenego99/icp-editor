@@ -3,6 +3,33 @@
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
     import Login from "../navbar/Login.svelte";
+
+    import { RevealInstance, slidesHTML } from "../../stores";
+
+    function saveSlides() {
+        // Get the list of Reveal slides
+        const revealSlides: Array<HTMLElement> = $RevealInstance.getSlides();
+
+        // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
+        let listOfSlidesHTML: Array<string> = revealSlides.map(slide => `<section>${slide.innerHTML}</section>`);
+        
+        // Remove all occurrences of contenteditable=true from listOfSlidesHTML
+        listOfSlidesHTML = listOfSlidesHTML.map(slide => slide.replace(/contenteditable="true"/g, ""));
+        
+        // Add contenteditable=true when you find a <base-editor></base-editor> tag
+        listOfSlidesHTML = listOfSlidesHTML.map(slide => slide.replace(/<base-editor /g, `<base-editor contenteditable="true" `));
+
+        // Add contenteditable=true when you find a <sql-editor></sql-editor> tag
+        listOfSlidesHTML = listOfSlidesHTML.map(slide => slide.replace(/<sql-editor /g, `<sql-editor contenteditable="true" `));
+
+        // Update the slidesHTML value inside the store
+        $slidesHTML = listOfSlidesHTML.toString();
+
+        console.log($slidesHTML);
+
+        // TODO: get an instance of redbean, put the slides html inside it and make the user download it
+    }
+
 </script>
 
 <nav>
@@ -13,7 +40,7 @@
                 <div class="dropdown-content">
                     <a href="#">New</a>
                     <a href="#">Open</a>
-                    <a href="#">Save as</a>
+                    <a on:click="{saveSlides}" href="#">Save as</a>
                 </div>
             </div>
         </div>
