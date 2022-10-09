@@ -1,6 +1,9 @@
 <script lang="ts">
+    import type { Slide } from "src/classes/Slide";
     import { onMount } from "svelte";
     import SelectElement from "../SelectElement.svelte";
+
+    export let slide: Slide;
 
     let col1: HTMLDivElement;
     let col2: HTMLDivElement;
@@ -27,6 +30,7 @@
             const p = document.createElement("p");
             p.innerText = "Text";
             p.contentEditable = "true";
+            p.classList.add("editable");
             container.appendChild(p);
             col.appendChild(container);
         } else if (value == 2) {
@@ -46,17 +50,20 @@
     onMount(() => {});
 </script>
 
-<section>
+<section bind:this={slide.html} class="future">
     <h3 class="title" contenteditable="true">Title</h3>
 
-    <div
-        style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center"
-    >
-        <div class="row" style="width: 100%; height: 100%;">
-            <div bind:this={col1} class="col" style="flex: 1;">
+    <div class="w-[80%] h-[80%] flex justify-center items-center">
+        <div class="w-full h-full">
+            <div
+                bind:this={col1}
+                class="w-full h-full overflow-auto flex-1"
+                style="flex: 1;"
+            >
                 <div
-                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
-                    class={isContentCol1Undefined ? "undefined" : ""}
+                    class="w-full h-full flex justify-center items-center box-border {isContentCol1Undefined
+                        ? 'w-full h-full border-2 border-[#aa2233]'
+                        : ''}"
                 >
                     {#if isContentCol1Undefined}
                         <SelectElement
@@ -67,10 +74,15 @@
                     {/if}
                 </div>
             </div>
-            <div bind:this={col2} class="col" style="flex: 1;">
+            <div
+                bind:this={col2}
+                class="w-full h-full overflow-auto flex-1"
+                style="flex: 1;"
+            >
                 <div
-                    style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
-                    class={isContentCol2Undefined ? "undefined" : ""}
+                    class="w-full h-full flex justify-center items-center box-border {isContentCol2Undefined
+                        ? 'w-full h-full border-2 border-[#aa2233]'
+                        : ''}"
                 >
                     {#if isContentCol2Undefined}
                         <SelectElement
@@ -84,21 +96,3 @@
         </div>
     </div>
 </section>
-
-<style>
-    p {
-        font-size: 2.5vmin;
-    }
-
-    .col {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-    }
-
-    .undefined {
-        width: 100%;
-        height: 100%;
-        border: 2px solid #aa2233;
-    }
-</style>

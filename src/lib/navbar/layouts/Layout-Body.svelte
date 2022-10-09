@@ -1,0 +1,14 @@
+<script lang="ts">
+    export let isActive: boolean;
+</script>
+
+<div
+    class="flex justify-center items-center relative cursor-pointer rounded-sm w-full pt-[56.25%] bg-white transition-all hover:bg-[#adadad] {isActive
+        ? 'border-solid border-2 border-[#c3073f]'
+        : ''}"
+>
+    <div class="absolute rounded-lg top-[15%] w-[60%] h-[15%] bg-[#6c6c6c]" />
+    <div class="absolute rounded-lg top-[45%] w-[30%] h-[8%] bg-[#6c6c6c]" />
+    <div class="absolute rounded-lg top-[60%] w-[30%] h-[8%] bg-[#6c6c6c]" />
+    <div class="absolute rounded-lg top-[75%] w-[30%] h-[8%] bg-[#6c6c6c]" />
+</div>
