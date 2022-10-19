@@ -12,6 +12,19 @@
 
     let col1Type: Types | undefined, col2Type: Types | undefined;
 
+    function slideState(): string {
+        let state: string;
+        if (slide.indexH < $currentSlideH || (slide.indexH == $currentSlideH && slide.indexV < $currentSlideV)) {
+            state = "past";
+        } else if (slide.indexH == $currentSlideH && slide.indexV == $currentSlideV) {
+            state = "present";
+        } else {
+            state = "future";
+        }
+
+        return state;
+    }
+
     function setElement(value: Types, col: HTMLDivElement) {
         if (col == col1) {
             col1Type = value;
@@ -21,7 +34,7 @@
     }
 </script>
 
-<section bind:this={slide.html} class="{slide.indexH == $currentSlideH && slide.indexV == $currentSlideV ? 'present' : 'future'}">
+<section bind:this={slide.html} class="{slideState()}">
     <h3 class="title" contenteditable="true">Title</h3>
 
     <div class="w-[80%] h-[80%] flex flex-row justify-center items-center">

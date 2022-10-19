@@ -5,7 +5,13 @@
     import Login from "../navbar/Login.svelte";
     import { Layouts, type Language } from "../../types";
 
-    import { slidesHTML, currentLanguage, revealSlides, currentSlideH, currentSlideV, RevealInstance } from "../../stores";
+    import {
+        slidesHTML,
+        currentLanguage,
+        revealSlides,
+        currentSlideH,
+        currentSlideV,
+    } from "../../stores";
 
     function saveSlides() {
         // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
@@ -33,7 +39,7 @@
      * Change the current default language. Calling this function will:
      * - change the default programming language used when creating a new slide
      * - change the programming language used in the current slide
-    */
+     */
     function setCurrentLanguage(event: MouseEvent): void {
         // Get the selected language
         $currentLanguage = (
@@ -43,13 +49,17 @@
         console.log("Setting language to " + $currentLanguage);
 
         // Change the programming language used in the current slide
-        $revealSlides[$currentSlideH][$currentSlideV].setLanguage($currentLanguage);
+        $revealSlides[$currentSlideH][$currentSlideV].setLanguage(
+            $currentLanguage
+        );
 
         revealSlides.set($revealSlides);
     }
 
     function setLayout(layout: Layouts): void {
-        console.log(`Setting layout of ${$currentSlideH}, ${currentSlideV} to ${layout}`);
+        console.log(
+            `Setting layout of ${$currentSlideH}, ${currentSlideV} to ${layout}`
+        );
         $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
 
         revealSlides.set($revealSlides);
@@ -66,18 +76,17 @@
                 <div
                     class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:flex"
                 >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        href="#">New</a
+                        >New</button
                     >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        href="#">Open</a
+                        >Open</button
                     >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={saveSlides}
-                        href="#">Save as</a
+                        on:click={saveSlides}>Save as</button
                     >
                 </div>
             </div>
@@ -95,13 +104,28 @@
             style="margin-left: 2em;"
         >
             <div class="overflow-hidden">
-                <p class="py-1 px-2 text-sm">Layout {$revealSlides[$currentSlideH][$currentSlideV].layout + 1}</p>
+                <p class="py-1 px-2 text-sm">
+                    Layout {$revealSlides[$currentSlideH][$currentSlideV]
+                        .layout + 1}
+                </p>
                 <div
                     class="transform-modal-body dropdown-content absolute m-0 p-1 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:grid"
                 >
-                    <LayoutMain on:click={() => setLayout(Layouts.MAIN)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.MAIN} />
-                    <LayoutBody on:click={() => setLayout(Layouts.BODY)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.BODY} />
-                    <LayoutColumns on:click={() => setLayout(Layouts.COLUMNS)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.COLUMNS} />
+                    <LayoutMain
+                        on:click={() => setLayout(Layouts.MAIN)}
+                        isActive={$revealSlides[$currentSlideH][$currentSlideV]
+                            .layout == Layouts.MAIN}
+                    />
+                    <LayoutBody
+                        on:click={() => setLayout(Layouts.BODY)}
+                        isActive={$revealSlides[$currentSlideH][$currentSlideV]
+                            .layout == Layouts.BODY}
+                    />
+                    <LayoutColumns
+                        on:click={() => setLayout(Layouts.COLUMNS)}
+                        isActive={$revealSlides[$currentSlideH][$currentSlideV]
+                            .layout == Layouts.COLUMNS}
+                    />
                 </div>
             </div>
         </div>
@@ -113,29 +137,28 @@
             style="margin-left: 2em;"
         >
             <div class="overflow-hidden">
-                <p class="py-1 px-2 text-sm">{$currentLanguage.charAt(0).toUpperCase() + $currentLanguage.slice(1)}</p>
+                <p class="py-1 px-2 text-sm">
+                    {$currentLanguage.charAt(0).toUpperCase() +
+                        $currentLanguage.slice(1)}
+                </p>
                 <div
                     class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:flex"
                 >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={setCurrentLanguage}
-                        href="#">Python</a
+                        on:click={setCurrentLanguage}>Python</button
                     >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={setCurrentLanguage}
-                        href="#">Typescript</a
+                        on:click={setCurrentLanguage}>Typescript</button
                     >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={setCurrentLanguage}
-                        href="#">Javascript</a
+                        on:click={setCurrentLanguage}>Javascript</button
                     >
-                    <a
+                    <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={setCurrentLanguage}
-                        href="#">Java</a
+                        on:click={setCurrentLanguage}>Java</button
                     >
                 </div>
             </div>

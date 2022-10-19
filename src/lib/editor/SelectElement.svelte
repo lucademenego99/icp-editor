@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Types } from "../../types";
 
-    export let onSelect = (value: Types) => {};
+    export let onSelect: (value: Types) => void;
 
     function select(value) {
         onSelect(value);

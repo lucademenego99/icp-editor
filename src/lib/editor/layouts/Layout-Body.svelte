@@ -12,7 +12,20 @@
 
     let bodyType: Types | undefined;
 
-    function setElement(value: Types) {
+    function slideState(): string {
+        let state: string;
+        if (slide.indexH < $currentSlideH || (slide.indexH == $currentSlideH && slide.indexV < $currentSlideV)) {
+            state = "past";
+        } else if (slide.indexH == $currentSlideH && slide.indexV == $currentSlideV) {
+            state = "present";
+        } else {
+            state = "future";
+        }
+
+        return state;
+    }
+
+    function setElement(value: Types): void {
         bodyType = value;
     }
 
@@ -21,7 +34,7 @@
 
 <section
     bind:this={slide.html}
-    class="{slide.indexH == $currentSlideH && slide.indexV == $currentSlideV ? 'present' : 'future'}"
+    class="{slideState()}"
 >
     <!-- title class: custom style for titles -->
     <h3 class="title" contenteditable="true">Title</h3>
@@ -33,7 +46,7 @@
             : ''}"
     >
         {#if bodyType == undefined}
-            <SelectElement onSelect={(value) => setElement(value)} />
+            <SelectElement onSelect={setElement} />
         {:else if bodyType == Types.TEXT}
             <p contenteditable="true" class="editable text-3xl">Text</p>
         {:else if bodyType == Types.CODE}
