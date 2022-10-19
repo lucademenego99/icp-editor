@@ -1,17 +1,25 @@
-import type { Layouts } from "src/types";
+import type { Language, Layouts } from "src/types";
+import { RevealInstance } from "../stores";
 
 export class Slide {
     indexH: number;
     indexV: number;
     layout: Layouts;
     html: HTMLElement;
+    language: Language;
     code: string;
 
-    constructor(indexH: number, indexV: number, layout: Layouts) {
+    constructor(indexH: number, indexV: number, language: Language, layout: Layouts) {
         this.indexH = indexH;
         this.indexV = indexV;
         this.layout = layout;
-        this.code = 'print("ciao")';
+        this.language = language;
+        this.code = '';
+    }
+
+    setLanguage(language: Language) {
+        this.html.innerHTML = this.html.innerHTML.replaceAll(this.language, language);
+        this.language = language;
     }
 
     getHtml() {

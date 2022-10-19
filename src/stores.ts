@@ -1,6 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 import { Slide } from './classes/Slide';
-import { Layouts } from './types';
+import { Layouts, type Language } from './types';
 
 /**
  * Current instance of the Reveal Plugin
@@ -10,7 +10,7 @@ export const RevealInstance: any = writable(null);
 /**
  * Chosen layouts of the slides created by the user
  */
-export const revealSlides: Writable<Array<Array<Slide>>> = writable([[new Slide(0, 0, Layouts.MAIN)]]);
+export const revealSlides: Writable<Array<Array<Slide>>> = writable([[new Slide(0, 0, "python", Layouts.MAIN)]]);
 
 /**
  * Inner HTML of all the slides created by the user
@@ -30,4 +30,4 @@ export const currentSlideV: Writable<number> = writable(0);
 /**
  * Current language selected by the user
  */
-export const currentLanguage: Writable<string> = writable("python");
+export const currentLanguage: Writable<Language> = writable("typescript");

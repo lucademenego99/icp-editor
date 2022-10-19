@@ -23,9 +23,7 @@
             const container = document.createElement("div");
             container.style.height = "100%";
             container.style.width = "100%";
-            container.innerHTML = `
-<python-editor contenteditable="true" theme="dark" type="vertical" code="print(&quot;ciao&quot;);" style="height: 100%;" />
-            `;
+            container.innerHTML = `<${slide.language.toLowerCase()}-editor contenteditable="true" theme="dark" type="vertical" code="" style="height: 100%;" />`;
             container.addEventListener("changedcode", (e: any) => {
                 console.log(e);
                 slide.code = e.detail.output;

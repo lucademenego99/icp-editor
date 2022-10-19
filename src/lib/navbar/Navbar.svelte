@@ -3,7 +3,7 @@
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
     import Login from "../navbar/Login.svelte";
-    import { Layouts } from "../../types";
+    import { Layouts, type Language } from "../../types";
 
     import { slidesHTML, currentLanguage, revealSlides, currentSlideH, currentSlideV } from "../../stores";
 
@@ -29,10 +29,26 @@
         // TODO: get an instance of redbean, put the slides html inside it and make the user download it
     }
 
+    /**
+     * Change the current default language. Calling this function will:
+     * - change the default programming language used when creating a new slide
+     * - change the programming language used in the current slide
+    */
     function setCurrentLanguage(event: MouseEvent): void {
+        // Get the selected language
         $currentLanguage = (
             event.target as HTMLLinkElement
-        ).textContent.toLowerCase();
+        ).textContent.toLowerCase() as Language;
+
+        console.log("Setting language to " + $currentLanguage);
+
+        // Change the programming language used in the current slide
+        $revealSlides[$currentSlideH][$currentSlideV].setLanguage($currentLanguage);
+    }
+
+    function setLayout(layout: Layouts): void {
+        console.log(`Setting layout of ${$currentSlideH}, ${currentSlideV} to ${layout}`);
+        $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
     }
 </script>
 
@@ -79,9 +95,9 @@
                 <div
                     class="transform-modal-body dropdown-content absolute m-0 p-1 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:grid"
                 >
-                    <LayoutMain isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.MAIN} />
-                    <LayoutBody isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.BODY} />
-                    <LayoutColumns isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.COLUMNS} />
+                    <LayoutMain on:click={() => setLayout(Layouts.MAIN)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.MAIN} />
+                    <LayoutBody on:click={() => setLayout(Layouts.BODY)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.BODY} />
+                    <LayoutColumns on:click={() => setLayout(Layouts.COLUMNS)} isActive={$revealSlides[$currentSlideH][$currentSlideV].layout == Layouts.COLUMNS} />
                 </div>
             </div>
         </div>

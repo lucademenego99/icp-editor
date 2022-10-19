@@ -1,13 +1,13 @@
 <script lang="ts">
     import { Layouts } from "../../types";
 
-    import { RevealInstance, revealSlides, currentSlideH } from "../../stores";
+    import { RevealInstance, revealSlides, currentSlideH, currentLanguage } from "../../stores";
     import { Slide } from "../../classes/Slide";
 
     const newSlide = () => {
         $revealSlides = [
             ...$revealSlides,
-            [new Slide($revealSlides.length, 0, Layouts.BODY)],
+            [new Slide($revealSlides.length, 0, $currentLanguage, Layouts.BODY)],
         ];
         $RevealInstance.sync();
         setTimeout(() => {
@@ -21,6 +21,7 @@
             new Slide(
                 $currentSlideH,
                 newSlides[$currentSlideH].length,
+                $currentLanguage,
                 Layouts.BODY
             )
         );

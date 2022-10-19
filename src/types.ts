@@ -3,3 +3,5 @@ export enum Layouts {
     BODY = 1,
     COLUMNS = 2
 }
+
+export type Language = "python" | "java" | "javascript" | "typescript" | "sql";
