@@ -53,7 +53,7 @@
             theme: "blood",
             // Select the type of slides transition
             transition: "slide",
-            embedded: true,
+            embedded: false,
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
         });

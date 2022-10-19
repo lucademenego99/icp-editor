@@ -1,54 +1,43 @@
 <script lang="ts">
-    import type { Slide } from "src/classes/Slide";
+    import type { Slide } from "../../../classes/Slide";
     import { onMount } from "svelte";
     import SelectElement from "../SelectElement.svelte";
+    import { currentSlideH, currentSlideV } from "../../../stores";
+    import { Types } from "../../../types";
+    import Icp from "../ICP.svelte";
 
     export let slide: Slide;
 
     let body: HTMLDivElement;
 
-    let isContentUndefined = true;
+    let bodyType: Types | undefined;
 
-    function setElement(value: number) {
-        isContentUndefined = false;
-        if (value == 1) {
-            // Create a p element and append it to the body
-            const p = document.createElement("p");
-            p.innerHTML = "Text";
-            p.contentEditable = "true";
-            p.classList.add("editable", "text-3xl");
-            body.appendChild(p);
-        } else if (value == 2) {
-            // Create a p element and append it to the body
-            const container = document.createElement("div");
-            container.style.height = "100%";
-            container.style.width = "100%";
-            container.innerHTML = `<${slide.language.toLowerCase()}-editor contenteditable="true" theme="dark" type="vertical" code="" style="height: 100%;" />`;
-            container.addEventListener("changedcode", (e: any) => {
-                console.log(e);
-                slide.code = e.detail.output;
-            });
-            body.appendChild(container);
-        }
+    function setElement(value: Types) {
+        bodyType = value;
     }
 
     onMount(() => {});
 </script>
 
-<section bind:this={slide.html} class="future">
+<section
+    bind:this={slide.html}
+    class="{slide.indexH == $currentSlideH && slide.indexV == $currentSlideV ? 'present' : 'future'}"
+>
     <!-- title class: custom style for titles -->
     <h3 class="title" contenteditable="true">Title</h3>
 
     <div
         bind:this={body}
-        class="w-[80%] h-[80%] flex justify-center items-center overflow-auto {isContentUndefined
+        class="w-[80%] h-[80%] flex justify-center items-center overflow-auto {bodyType == undefined
             ? 'border-solid border-2 border-[#aa2233]'
             : ''}"
     >
-        {#if isContentUndefined}
-            <SelectElement onSelect={setElement} />
-        {:else}
-            <div />
+        {#if bodyType == undefined}
+            <SelectElement onSelect={(value) => setElement(value)} />
+        {:else if bodyType == Types.TEXT}
+            <p contenteditable="true" class="editable text-3xl">Text</p>
+        {:else if bodyType == Types.CODE}
+            <Icp language={slide.language} />
         {/if}
     </div>
 </section>

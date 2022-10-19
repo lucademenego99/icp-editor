@@ -5,7 +5,7 @@
     import Login from "../navbar/Login.svelte";
     import { Layouts, type Language } from "../../types";
 
-    import { slidesHTML, currentLanguage, revealSlides, currentSlideH, currentSlideV } from "../../stores";
+    import { slidesHTML, currentLanguage, revealSlides, currentSlideH, currentSlideV, RevealInstance } from "../../stores";
 
     function saveSlides() {
         // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
@@ -44,11 +44,15 @@
 
         // Change the programming language used in the current slide
         $revealSlides[$currentSlideH][$currentSlideV].setLanguage($currentLanguage);
+
+        revealSlides.set($revealSlides);
     }
 
     function setLayout(layout: Layouts): void {
         console.log(`Setting layout of ${$currentSlideH}, ${currentSlideV} to ${layout}`);
         $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
+
+        revealSlides.set($revealSlides);
     }
 </script>
 

@@ -18,7 +18,6 @@ export class Slide {
     }
 
     setLanguage(language: Language) {
-        this.html.innerHTML = this.html.innerHTML.replaceAll(this.language, language);
         this.language = language;
     }
 

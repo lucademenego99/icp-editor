@@ -1,97 +1,70 @@
 <script lang="ts">
-    import type { Slide } from "src/classes/Slide";
-    import { onMount } from "svelte";
+    import type { Slide } from "../../../classes/Slide";
+    import { Types } from "../../../types";
+    import Icp from "../ICP.svelte";
     import SelectElement from "../SelectElement.svelte";
+    import { currentSlideH, currentSlideV } from "../../../stores";
 
     export let slide: Slide;
 
     let col1: HTMLDivElement;
     let col2: HTMLDivElement;
 
-    let isContentCol1Undefined = true,
-        isContentCol2Undefined = true;
+    let col1Type: Types | undefined, col2Type: Types | undefined;
 
-    function setElement(value: number, col: HTMLDivElement) {
+    function setElement(value: Types, col: HTMLDivElement) {
         if (col == col1) {
-            isContentCol1Undefined = false;
+            col1Type = value;
         } else if (col == col2) {
-            isContentCol2Undefined = false;
-        }
-        col.innerHTML = "";
-        if (value == 1) {
-            // Create a container that centers the text inside it horizontally and vertically
-            const container = document.createElement("div");
-            container.style.height = "100%";
-            container.style.width = "100%";
-            container.style.display = "flex";
-            container.style.justifyContent = "center";
-            container.style.alignItems = "center";
-            // Create a p element and append it to the body
-            const p = document.createElement("p");
-            p.innerText = "Text";
-            p.contentEditable = "true";
-            p.classList.add("editable");
-            container.appendChild(p);
-            col.appendChild(container);
-        } else if (value == 2) {
-            // Create a p element and append it to the body
-            const container = document.createElement("div");
-            container.style.height = "100%";
-            container.style.width = "100%";
-            const type =
-                col.clientHeight > col.clientWidth ? "" : "type='vertical'";
-            container.innerHTML = `
-<base-editor contenteditable="true" language="python" theme="dark" ${type} style="height: 100%; box-sizing: border-box;" code="print('Write your code!')" />
-            `;
-            col.appendChild(container);
+            col2Type = value;
         }
     }
-
-    onMount(() => {});
 </script>
 
-<section bind:this={slide.html} class="future">
+<section bind:this={slide.html} class="{slide.indexH == $currentSlideH && slide.indexV == $currentSlideV ? 'present' : 'future'}">
     <h3 class="title" contenteditable="true">Title</h3>
 
-    <div class="w-[80%] h-[80%] flex justify-center items-center">
-        <div class="w-full h-full">
+    <div class="w-[80%] h-[80%] flex flex-row justify-center items-center">
+        <div
+            bind:this={col1}
+            class="w-full h-full overflow-auto flex-1"
+            style="flex: 1;"
+        >
             <div
-                bind:this={col1}
-                class="w-full h-full overflow-auto flex-1"
-                style="flex: 1;"
+                class="w-full h-full flex justify-center items-center box-border {col1Type == undefined
+                    ? 'w-full h-full border-2 border-[#aa2233]'
+                    : ''}"
             >
-                <div
-                    class="w-full h-full flex justify-center items-center box-border {isContentCol1Undefined
-                        ? 'w-full h-full border-2 border-[#aa2233]'
-                        : ''}"
-                >
-                    {#if isContentCol1Undefined}
-                        <SelectElement
-                            onSelect={(value) => setElement(value, col1)}
-                        />
-                    {:else}
-                        <div />
-                    {/if}
-                </div>
+                {#if col1Type == undefined}
+                    <SelectElement
+                        onSelect={(value) => setElement(value, col1)}
+                    />
+                {:else if col1Type == Types.TEXT}
+                    <p contenteditable="true" class="editable text-3xl">Text</p>
+                {:else if col1Type == Types.CODE}
+                    <Icp language={slide.language} />
+                {/if}
             </div>
+        </div>
+        <div
+            bind:this={col2}
+            class="w-full h-full overflow-auto flex-1"
+            style="flex: 1;"
+        >
             <div
-                bind:this={col2}
-                class="w-full h-full overflow-auto flex-1"
-                style="flex: 1;"
+                class="w-full h-full flex justify-center items-center box-border {col2Type == undefined
+                    ? 'w-full h-full border-2 border-[#aa2233]'
+                    : ''}"
             >
-                <div
-                    class="w-full h-full flex justify-center items-center box-border {isContentCol2Undefined
-                        ? 'w-full h-full border-2 border-[#aa2233]'
-                        : ''}"
-                >
-                    {#if isContentCol2Undefined}
-                        <SelectElement
-                            onSelect={(value) => setElement(value, col2)}
-                        />
-                    {:else}
-                        <div />
-                    {/if}
-                </div>
+                {#if col2Type == undefined}
+                    <SelectElement
+                        onSelect={(value) => setElement(value, col2)}
+                    />
+                {:else if col2Type == Types.TEXT}
+                    <p contenteditable="true" class="editable text-3xl">Text</p>
+                {:else if col2Type == Types.CODE}
+                    <Icp language={slide.language} />
+                {/if}
             </div>
         </div>
     </div>
