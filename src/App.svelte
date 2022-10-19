@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Navbar from "./components/navbar/Navbar.svelte";
-	import Editor from "./components/editor/Editor.svelte";
+	import Navbar from "./lib/navbar/Navbar.svelte";
+	import Editor from "./lib/editor/Editor.svelte";
 </script>
 
-<main>
+<main class="flex flex-col w-full h-full bg-[#1a1a1d] text-white">
 	<Navbar />
 	<Editor />
 </main>
@@ -25,8 +25,7 @@
 
 	<!-- <link rel="stylesheet" href="blood.css"> -->
 
-	<script
-		src="https://unpkg.com/icp-bundle@0.0.6/dist/base/icp-bundle.umd.js"></script>
+	<script src="https://unpkg.com/icp-bundle@0.1.1/dist/base/full.iife.js"></script>
 	
 		<!-- <script src="icp-bundle.umd.js"></script> -->
 
@@ -43,8 +42,8 @@
 			width: 100vw;
 		}
 
-		[contenteditable="true"]:active,
-		[contenteditable="true"]:focus {
+		[contenteditable="true"].editable:active,
+		[contenteditable="true"].editable:focus {
 			border: none;
 			outline: none;
 			display: block;
@@ -70,13 +69,3 @@
 		}
 	</style>
 </svelte:head>
-
-<style>
-	main {
-		width: 100%;
-		height: 100%;
-		font-family: "Roboto", sans-serif;
-		background: #1a1a1d;
-		color: white;
-	}
-</style>

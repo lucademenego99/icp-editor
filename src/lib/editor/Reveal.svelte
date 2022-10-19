@@ -7,20 +7,21 @@
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
 
-    import { RevealInstance, revealSlides } from "../../stores";
+    import {
+        RevealInstance,
+        revealSlides,
+        currentSlideH,
+        currentSlideV,
+    } from "../../stores";
     import { Layouts } from "../../types";
+    import type { Slide } from "src/classes/Slide";
 
-    let slides: Layouts[];
+    let slides: Slide[][];
 
     // Update the slides variable based on the store's value
-	revealSlides.subscribe(value => {
-		slides = value;
-	});
-
-    // If the slides changed and Reveal is ready, go to the last slide
-    $: if (slides && Reveal.next) {
-        setTimeout(() => {Reveal.slide(Reveal.getSlides().length - 1)}, 50);
-    }
+    revealSlides.subscribe((value) => {
+        slides = value;
+    });
 
     onMount(() => {
         Reveal.initialize({
@@ -29,13 +30,17 @@
             // Display a presentation progress bar
             progress: true,
             // Push each slide change to the browser history
-            history: true,
+            history: false,
             // Enable keyboard shortcuts for navigation
             keyboard: true,
             // Enable the slide overview mode
             overview: false,
             // Vertical centering of slides
             center: true,
+            // Should a help overlay be presented when the question mark key is pressed?
+            help: false,
+            // Should it be possible to pause the presentation?
+            pause: false,
             // Loop the presentation
             loop: false,
             // Enables touch navigation on devices with touch input
@@ -48,9 +53,15 @@
             theme: "blood",
             // Select the type of slides transition
             transition: "slide",
-            embedded: true,
+            embedded: false,
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
+        });
+
+        Reveal.addEventListener("slidechanged", (e) => {
+            console.log("Changed slide to ", e.indexh, e.indexv);
+            $currentSlideH = e.indexh;
+            $currentSlideV = e.indexv;
         });
 
         $RevealInstance = Reveal;
@@ -69,14 +80,18 @@
         data-background-transition="fade"
     >
         <div class="slides">
-            {#each slides as slide}
-                {#if slide == Layouts.BODY}
-                    <LayoutBody />
-                {:else if slide == Layouts.MAIN}
-                    <LayoutMain />
-                {:else if slide == Layouts.COLUMNS}
-                    <LayoutColumns />
-                {/if}
+            {#each slides as verticalSlides}
+                <section>
+                    {#each verticalSlides as slide}
+                        {#if slide.layout == Layouts.BODY}
+                            <LayoutBody {slide} />
+                        {:else if slide.layout == Layouts.MAIN}
+                            <LayoutMain {slide} />
+                        {:else if slide.layout == Layouts.COLUMNS}
+                            <LayoutColumns {slide} />
+                        {/if}
+                    {/each}
+                </section>
             {/each}
         </div>
     </div>

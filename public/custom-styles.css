@@ -7,7 +7,6 @@ section {
     justify-content: center;
     align-items: center;
     padding: 1vmin 1vmin 1vmin 1vmin;
-    overflow: auto;
     box-sizing: border-box !important;
 }
 
