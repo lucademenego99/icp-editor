@@ -4,6 +4,9 @@
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
     import Login from "../navbar/Login.svelte";
     import { Layouts, type Language } from "../../types";
+    import { generateRedbeanFile } from "icp-create-server";
+    import redbean from "../../assets/redbean.com?url";
+    import { saveAs } from 'file-saver';
 
     import {
         slidesHTML,
@@ -13,7 +16,13 @@
         currentSlideV,
     } from "../../stores";
 
-    function saveSlides() {
+    function bufferToHex(buffer) {
+        return [...new Uint8Array(buffer)]
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    async function saveSlides() {
         // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
         let listOfSlidesHTML: Array<string> = $revealSlides.map(
             (slides) =>
@@ -28,11 +37,20 @@
         );
 
         // Update the slidesHTML value inside the store
-        $slidesHTML = listOfSlidesHTML.toString();
+        $slidesHTML = listOfSlidesHTML.join(" ");
 
-        console.log($slidesHTML);
+        const response = await fetch(redbean);
+        const file = await response.blob();
 
-        // TODO: get an instance of redbean, put the slides html inside it and make the user download it
+        // Get the hex string
+        let zipString = bufferToHex(await file.arrayBuffer());
+
+        const generated = await generateRedbeanFile($slidesHTML, zipString);
+        var typedArray = new Uint8Array(generated.match(/[\da-f]{2}/gi).map(function (h) {
+            return parseInt(h, 16)
+        }))
+        const blob = new Blob([typedArray.buffer], { type: "application/zip" });
+        saveAs(blob, "red.com");
     }
 
     /**
