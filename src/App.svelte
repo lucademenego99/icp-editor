@@ -1,6 +1,12 @@
 <script lang="ts">
 	import Navbar from "./lib/navbar/Navbar.svelte";
 	import Editor from "./lib/editor/Editor.svelte";
+
+	import revealCSS from "./styles/reveal.css?url";
+	import bloodCSS from "./styles/blood.css?url";
+	import customCSS from "./styles/custom-styles.css?url";
+
+	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
 </script>
 
 <main class="flex flex-col w-full h-full bg-[#1a1a1d] text-white">
@@ -10,27 +16,16 @@
 
 <svelte:head>
 	<!-- Main Reveal Stylesheet -->
-	<link
-		rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.css"
-	/>
-	<!-- <link rel="stylesheet" href="reveal.css"> -->
+	<link rel="stylesheet" href="{revealCSS}">
 
-	<!-- Blood Reveal Theme Stylesheet -->
-	<link
-		rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/blood.css"
-		id="theme"
-	/>
+	<!-- Reveal Custom Theme -->
+	<link rel="stylesheet" href="{bloodCSS}">
 
-	<!-- <link rel="stylesheet" href="blood.css"> -->
-
-	<script src="https://unpkg.com/icp-bundle@0.1.1/dist/base/full.iife.js"></script>
-	
-		<!-- <script src="icp-bundle.umd.js"></script> -->
+	<!-- ICP bundle loaded from node_modules -->
+	<script src="{bundle}"></script>
 
 	<!-- Custom stylesheet to make reveal work with our playgrounds -->
-	<link rel="stylesheet" href="custom-styles.css" />
+	<link rel="stylesheet" href="{customCSS}" />
 
 	<style>
 		@import url(https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500otaòoc,600,600italic,700,700italic);
