@@ -37,14 +37,14 @@
 <section bind:this={slide.html} class="{slideState()}">
     <h3 class="title" contenteditable="true">Title</h3>
 
-    <div class="w-[80%] h-[80%] flex flex-row justify-center items-center">
+    <div style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center;">
         <div
             bind:this={col1}
-            class="w-full h-full overflow-auto flex-1"
-            style="flex: 1;"
+            style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                class="w-full h-full flex justify-center items-center box-border {col1Type == undefined
+                style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
+                class="{col1Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"
             >
@@ -61,11 +61,11 @@
         </div>
         <div
             bind:this={col2}
-            class="w-full h-full overflow-auto flex-1"
-            style="flex: 1;"
+            style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                class="w-full h-full flex justify-center items-center box-border {col2Type == undefined
+                style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
+                class="{col2Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"
             >

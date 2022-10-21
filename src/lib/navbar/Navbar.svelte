@@ -24,20 +24,17 @@
 
     async function saveSlides() {
         // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-        let listOfSlidesHTML: Array<string> = $revealSlides.map(
+        $slidesHTML = $revealSlides.map(
             (slides) =>
                 "<section>" +
                 slides
                     .map(
                         (slide) =>
-                            `<section>${slide.getHtml()}</section>` +
-                            "</section>"
+                            `<section>${slide.getHtml()}</section>`
                     )
-                    .join("\n")
-        );
-
-        // Update the slidesHTML value inside the store
-        $slidesHTML = listOfSlidesHTML.join(" ");
+                    .join("\n") +
+                "</section>"
+        ).join("\n");
 
         const response = await fetch(redbean);
         const file = await response.blob();
@@ -45,11 +42,8 @@
         // Get the hex string
         let zipString = bufferToHex(await file.arrayBuffer());
 
-        const generated = await generateRedbeanFile($slidesHTML, zipString);
-        var typedArray = new Uint8Array(generated.match(/[\da-f]{2}/gi).map(function (h) {
-            return parseInt(h, 16)
-        }))
-        const blob = new Blob([typedArray.buffer], { type: "application/zip" });
+        const generated: Uint8Array = await generateRedbeanFile($slidesHTML, zipString);
+        const blob = new Blob([generated.buffer], { type: "application/zip" });
         saveAs(blob, "red.com");
     }
 

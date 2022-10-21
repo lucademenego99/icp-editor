@@ -5,7 +5,7 @@
     export let type: "vertical" | "normal" = "normal";
 </script>
 
-<div class="code-container">
+<div style="width: 100%; height: 100%;">
 {#if language == "python"}
     <python-editor
         contenteditable="true"
@@ -48,10 +48,3 @@
     />
 {/if}
 </div>
-
-<style>
-    .code-container {
-        height: 100%;
-        width: 100%;
-    }
-</style>
