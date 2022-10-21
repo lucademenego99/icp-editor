@@ -31,3 +31,8 @@ export const currentSlideV: Writable<number> = writable(0);
  * Current language selected by the user
  */
 export const currentLanguage: Writable<Language> = writable("typescript");
+
+/**
+ * Name of the slide deck
+ */
+export const deckName: Writable<string> = writable("untitled");
