@@ -1,12 +1,21 @@
 <script lang="ts">
-    import type { Language } from "src/types";
+    import { onMount } from "svelte";
+    import type { Slide } from "../../classes/Slide";
 
-    export let language: Language;
+    export let slide: Slide;
     export let type: "vertical" | "normal" = "normal";
+
+    let editorParent: HTMLDivElement;
+
+    onMount(() => {
+        editorParent.addEventListener("changedcode", (e: any) => {
+            slide.code = e.detail.content;
+        });
+    });
 </script>
 
-<div class="code-container">
-{#if language == "python"}
+<div bind:this={editorParent} style="width: 100%; height: 100%;">
+{#if slide.language == "python"}
     <python-editor
         contenteditable="true"
         theme="dark"
@@ -14,7 +23,7 @@
         code=""
         style="height: 100%; width: 100%;"
     />
-{:else if language == "javascript"}
+{:else if slide.language == "javascript"}
     <javascript-editor
         contenteditable="true"
         theme="dark"
@@ -22,7 +31,7 @@
         code=""
         style="height: 100%; width: 100%;"
     />
-{:else if language == "typescript"}
+{:else if slide.language == "typescript"}
     <typescript-editor
         contenteditable="true"
         theme="dark"
@@ -30,7 +39,7 @@
         code=""
         style="height: 100%; width: 100%;"
     />
-{:else if language == "java"}
+{:else if slide.language == "java"}
     <java-editor
         contenteditable="true"
         theme="dark"
@@ -38,7 +47,7 @@
         code=""
         style="height: 100%; width: 100%;"
     />
-{:else if language == "sql"}
+{:else if slide.language == "sql"}
     <sql-editor
         contenteditable="true"
         theme="dark"
@@ -48,10 +57,3 @@
     />
 {/if}
 </div>
-
-<style>
-    .code-container {
-        height: 100%;
-        width: 100%;
-    }
-</style>

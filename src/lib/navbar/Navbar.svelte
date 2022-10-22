@@ -4,6 +4,9 @@
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
     import Login from "../navbar/Login.svelte";
     import { Layouts, type Language } from "../../types";
+    import { generateRedbeanFile } from "icp-create-server";
+    import redbean from "../../assets/redbean.com?url";
+    import { saveAs } from "file-saver";
 
     import {
         slidesHTML,
@@ -11,28 +14,46 @@
         revealSlides,
         currentSlideH,
         currentSlideV,
+        deckName,
     } from "../../stores";
 
-    function saveSlides() {
+    let currentDeckName = "untitled";
+
+    $: {
+        deckName.set(currentDeckName);
+    }
+
+    function bufferToHex(buffer) {
+        return [...new Uint8Array(buffer)]
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    async function saveSlides() {
         // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-        let listOfSlidesHTML: Array<string> = $revealSlides.map(
-            (slides) =>
-                "<section>" +
-                slides
-                    .map(
-                        (slide) =>
-                            `<section>${slide.getHtml()}</section>` +
-                            "</section>"
-                    )
-                    .join("\n")
+        $slidesHTML = $revealSlides
+            .map(
+                (slides) =>
+                    "<section>" +
+                    slides
+                        .map((slide) => `<section>${slide.getHtml()}</section>`)
+                        .join("\n") +
+                    "</section>"
+            )
+            .join("\n");
+
+        const response = await fetch(redbean);
+        const file = await response.blob();
+
+        // Get the hex string
+        let zipString = bufferToHex(await file.arrayBuffer());
+
+        const generated: Uint8Array = await generateRedbeanFile(
+            $slidesHTML,
+            zipString
         );
-
-        // Update the slidesHTML value inside the store
-        $slidesHTML = listOfSlidesHTML.toString();
-
-        console.log($slidesHTML);
-
-        // TODO: get an instance of redbean, put the slides html inside it and make the user download it
+        const blob = new Blob([generated.buffer], { type: "application/zip" });
+        saveAs(blob, `${$deckName}.com`);
     }
 
     /**
@@ -167,8 +188,12 @@
             style="border-right: 1px solid white; margin-left: 2em; height: 10px;"
         />
         <div style="margin-left: 2em;">
-            <p class="py-1 px-2 text-sm editable" contenteditable="true">
-                untitled
+            <p
+                bind:innerHTML={currentDeckName}
+                class="py-1 px-2 text-sm editable"
+                contenteditable="true"
+            >
+                {$deckName}
             </p>
         </div>
     </div>

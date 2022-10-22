@@ -14,9 +14,15 @@
 
     function slideState(): string {
         let state: string;
-        if (slide.indexH < $currentSlideH || (slide.indexH == $currentSlideH && slide.indexV < $currentSlideV)) {
+        if (
+            slide.indexH < $currentSlideH ||
+            (slide.indexH == $currentSlideH && slide.indexV < $currentSlideV)
+        ) {
             state = "past";
-        } else if (slide.indexH == $currentSlideH && slide.indexV == $currentSlideV) {
+        } else if (
+            slide.indexH == $currentSlideH &&
+            slide.indexV == $currentSlideV
+        ) {
             state = "present";
         } else {
             state = "future";
@@ -32,25 +38,23 @@
     onMount(() => {});
 </script>
 
-<section
-    bind:this={slide.html}
-    class="{slideState()}"
->
+<section bind:this={slide.html} class={slideState()}>
     <!-- title class: custom style for titles -->
     <h3 class="title" contenteditable="true">Title</h3>
 
     <div
         bind:this={body}
-        class="w-[80%] h-[80%] flex justify-center items-center overflow-auto {bodyType == undefined
-            ? 'border-solid border-2 border-[#aa2233]'
-            : ''}"
+        style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center; overflow: auto"
+        class={bodyType == undefined
+            ? "border-solid border-2 border-[#aa2233]"
+            : ""}
     >
         {#if bodyType == undefined}
             <SelectElement onSelect={setElement} />
         {:else if bodyType == Types.TEXT}
             <p contenteditable="true" class="editable text-3xl">Text</p>
         {:else if bodyType == Types.CODE}
-            <Icp language={slide.language} />
+            <Icp {slide} />
         {/if}
     </div>
 </section>
