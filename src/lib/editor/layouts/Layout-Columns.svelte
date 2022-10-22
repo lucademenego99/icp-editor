@@ -37,13 +37,13 @@
 <section bind:this={slide.html} class="{slideState()}">
     <h3 class="title" contenteditable="true">Title</h3>
 
-    <div style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center;">
+    <div style="width: 85%; height: 80%; display: flex; justify-content: space-around; align-items: center; gap: 2.5%">
         <div
             bind:this={col1}
             style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
+                style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;"
                 class="{col1Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"
@@ -64,7 +64,7 @@
             style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; box-sizing: border-box;"
+                style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;"
                 class="{col2Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"

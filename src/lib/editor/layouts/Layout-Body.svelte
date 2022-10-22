@@ -44,7 +44,7 @@
 
     <div
         bind:this={body}
-        style="width: 80%; height: 80%; display: flex; justify-content: center; align-items: center; overflow: auto"
+        style="width: 80%; height: 80%; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: auto; font-size: 2rem;"
         class={bodyType == undefined
             ? "border-solid border-2 border-[#aa2233]"
             : ""}

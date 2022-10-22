@@ -36,7 +36,7 @@
 			height: 100vh;
 			width: 100vw;
 		}
-
+	
 		[contenteditable="true"].editable:active,
 		[contenteditable="true"].editable:focus {
 			border: none;
