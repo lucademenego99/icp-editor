@@ -54,7 +54,7 @@
         {:else if bodyType == Types.TEXT}
             <p contenteditable="true" class="editable text-3xl">Text</p>
         {:else if bodyType == Types.CODE}
-            <Icp language={slide.language} />
+            <Icp {slide} />
         {/if}
     </div>
 </section>

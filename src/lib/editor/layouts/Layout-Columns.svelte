@@ -55,7 +55,7 @@
                 {:else if col1Type == Types.TEXT}
                     <p contenteditable="true" class="editable text-3xl">Text</p>
                 {:else if col1Type == Types.CODE}
-                    <Icp language={slide.language} />
+                    <Icp {slide} />
                 {/if}
             </div>
         </div>
@@ -76,7 +76,7 @@
                 {:else if col2Type == Types.TEXT}
                     <p contenteditable="true" class="editable text-3xl">Text</p>
                 {:else if col2Type == Types.CODE}
-                    <Icp language={slide.language} />
+                    <Icp {slide} />
                 {/if}
             </div>
         </div>
