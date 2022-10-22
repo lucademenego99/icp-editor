@@ -1,4 +1,4 @@
-import redbean from "../assets/redbean.com?url";
+import redbean from "icp-bundle/dist/base/redbean.com?url";
 import { generateRedbeanFile } from "icp-create-server";
 
 function bufferToHex(buffer) {
@@ -9,8 +9,6 @@ function bufferToHex(buffer) {
 
 // Customize the onmessage event
 onmessage = async (e) => {
-    console.log("MESSAGE RECEIVED:", e);
-
     const response = await fetch(redbean);
     const file = await response.blob();
 
