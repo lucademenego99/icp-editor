@@ -11,21 +11,27 @@ section {
 }
 
 p {
-    font-size: 2vmin;
+    font-size: 2.5vmin;
 }
 
 a {
     text-decoration: underline;
 }
 
+h1, h2 {
+    text-shadow: none !important;
+}
+
 ul,
 ol {
-    font-size: 1.8vmin;
+    font-size: 2.5vmin;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 code {
     line-height: 1.3;
-    font-size: 1.3vmin;
+    font-size: 2.4vmin;
 }
 
 

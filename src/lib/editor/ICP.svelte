@@ -9,7 +9,8 @@
 
     onMount(() => {
         editorParent.addEventListener("changedcode", (e: any) => {
-            slide.code = e.detail.content;
+            if (e.detail.content)
+                slide.code = e.detail.content;
         });
     });
 </script>

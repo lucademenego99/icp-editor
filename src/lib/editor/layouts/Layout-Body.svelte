@@ -10,6 +10,8 @@
 
     let body: HTMLDivElement;
 
+    let textBody: HTMLElement;
+
     let bodyType: Types | undefined;
 
     function slideState(): string {
@@ -31,14 +33,30 @@
         return state;
     }
 
-    function setElement(value: Types): void {
+    async function setElement(value: Types): Promise<void> {
         bodyType = value;
+
+        if (bodyType == Types.TEXT) {
+            const { default: Quill } = await import("quill");
+            var ColorClass = Quill.import('attributors/class/color');
+            var SizeStyle = Quill.import('attributors/style/size');
+            Quill.register(ColorClass, true);
+            Quill.register(SizeStyle, true);
+
+            new Quill(textBody, {
+                theme: "bubble",
+            });
+        }
     }
 
     onMount(() => {});
 </script>
 
 <section bind:this={slide.html} class={slideState()}>
+    {#if false}
+        <p class="ql-editor"></p>
+        <ul></ul>
+    {/if}
     <!-- title class: custom style for titles -->
     <h3 class="title" contenteditable="true">Title</h3>
 
@@ -52,9 +70,13 @@
         {#if bodyType == undefined}
             <SelectElement onSelect={setElement} />
         {:else if bodyType == Types.TEXT}
-            <p contenteditable="true" class="editable text-3xl">Text</p>
+            <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody}>Your text...</div>
         {:else if bodyType == Types.CODE}
             <Icp {slide} />
         {/if}
     </div>
 </section>
+
+<style>
+    @import 'https://cdn.quilljs.com/1.3.6/quill.bubble.css';
+</style>
