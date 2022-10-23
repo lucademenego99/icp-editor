@@ -14,6 +14,8 @@
 
     let bodyType: Types | undefined;
 
+    let encodedImage: string, imageAlt: string;
+
     function slideState(): string {
         let state: string;
         if (
@@ -33,7 +35,7 @@
         return state;
     }
 
-    async function setElement(value: Types): Promise<void> {
+    async function setElement(value: Types, image: string, alt: string): Promise<void> {
         bodyType = value;
 
         if (bodyType == Types.TEXT) {
@@ -46,6 +48,9 @@
             new Quill(textBody, {
                 theme: "bubble",
             });
+        } else if (bodyType == Types.IMAGE) {
+            encodedImage = image;
+            imageAlt = alt;
         }
     }
 
@@ -73,6 +78,8 @@
             <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody}>Your text...</div>
         {:else if bodyType == Types.CODE}
             <Icp {slide} />
+        {:else if bodyType == Types.IMAGE}
+            <img src={encodedImage} alt="{imageAlt}" style="width: 100%; height: 100%; object-fit: contain;" />
         {/if}
     </div>
 </section>

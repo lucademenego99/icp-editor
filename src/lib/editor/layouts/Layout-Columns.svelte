@@ -15,6 +15,7 @@
 
     let col1Type: Types | undefined, col2Type: Types | undefined;
     let textBody1: HTMLElement, textBody2: HTMLElement;
+    let encodedImage1: string, encodedImage2: string;
 
     onMount(async () => {
         const { default: Quill } = await import("quill");
@@ -54,11 +55,17 @@
         return state;
     }
 
-    async function setElement(value: Types, col: HTMLDivElement) {
+    async function setElement(value: Types, image: string, col: HTMLDivElement) {
         if (col == col1) {
             col1Type = value;
+            if (col1Type == Types.IMAGE) {
+                encodedImage1 = image;
+            }
         } else if (col == col2) {
             col2Type = value;
+            if (col2Type == Types.IMAGE) {
+                encodedImage2 = image;
+            }
         }
     }
 </script>
@@ -79,12 +86,15 @@
             >
                 {#if col1Type == undefined}
                     <SelectElement
-                        onSelect={(value) => setElement(value, col1)}
+                        onSelect={(value, image) => setElement(value, image, col1)}
                     />
                 {:else if col1Type == Types.TEXT}
                     <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody1}>Your text...</div>
                 {:else if col1Type == Types.CODE}
                     <Icp {slide} />
+                {:else if col1Type == Types.IMAGE}
+                    <img src={encodedImage1} alt="asdf asd" style="width: 100%; height: 80%; object-fit: contain; margin: 10px 0;" />
+                    <p class="caption" contenteditable="true" style="max-height: 20%; margin: 0; padding: 0; font-size: 18px;">Image Caption</p>
                 {/if}
             </div>
         </div>
@@ -100,12 +110,14 @@
             >
                 {#if col2Type == undefined}
                     <SelectElement
-                        onSelect={(value) => setElement(value, col2)}
+                        onSelect={(value, image) => setElement(value, image, col2)}
                     />
                 {:else if col2Type == Types.TEXT}
                     <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody2}>Your text...</div>
                 {:else if col2Type == Types.CODE}
                     <Icp {slide} />
+                {:else if col2Type == Types.IMAGE}
+                    <img src={encodedImage2} alt="asdf asd" style="width: 100%; height: 100%; object-fit: contain;" />
                 {/if}
             </div>
         </div>
