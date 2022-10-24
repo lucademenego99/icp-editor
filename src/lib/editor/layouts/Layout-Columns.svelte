@@ -5,6 +5,7 @@
     import SelectElement from "../SelectElement.svelte";
     import { currentSlideH, currentSlideV } from "../../../stores";
     import { onMount } from "svelte";
+    import QuillEditor from "../QuillEditor.svelte";
 
     export let slide: Slide;
 
@@ -89,7 +90,7 @@
                         onSelect={(value, image) => setElement(value, image, col1)}
                     />
                 {:else if col1Type == Types.TEXT}
-                    <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody1}>Your text...</div>
+                    <QuillEditor boundsParent={col1} />
                 {:else if col1Type == Types.CODE}
                     <Icp {slide} />
                 {:else if col1Type == Types.IMAGE}
@@ -113,11 +114,12 @@
                         onSelect={(value, image) => setElement(value, image, col2)}
                     />
                 {:else if col2Type == Types.TEXT}
-                    <div style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important" bind:this={textBody2}>Your text...</div>
+                    <QuillEditor boundsParent={col2} />
                 {:else if col2Type == Types.CODE}
                     <Icp {slide} />
                 {:else if col2Type == Types.IMAGE}
-                    <img src={encodedImage2} alt="asdf asd" style="width: 100%; height: 100%; object-fit: contain;" />
+                    <img src={encodedImage2} alt="asdf asd" style="width: 100%; height: 80%; object-fit: contain; margin: 10px 0;" />
+                    <p class="caption" contenteditable="true" style="max-height: 20%; margin: 0; padding: 0; font-size: 18px;">Image Caption</p>
                 {/if}
             </div>
         </div>

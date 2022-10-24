@@ -36,6 +36,10 @@
 			height: 100vh;
 			width: 100vw;
 		}
+
+		body * {
+			text-shadow: none !important;
+		}
 	
 		[contenteditable="true"].editable:active,
 		[contenteditable="true"].editable:focus {

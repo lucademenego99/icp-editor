@@ -12,9 +12,11 @@
         revealSlides,
         currentSlideH,
         currentSlideV,
+        RevealInstance,
         deckName,
     } from "../../stores";
     import Exporing from "../modals/Exporing.svelte";
+    import { Slide } from "../../classes/Slide";
 
     let currentDeckName = "untitled";
 
@@ -24,10 +26,12 @@
         deckName.set(currentDeckName);
     }
 
-    function bufferToHex(buffer) {
-        return [...new Uint8Array(buffer)]
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("");
+    function reset() {
+        revealSlides.set([[new Slide(0, 0, "python", Layouts.MAIN)]]);
+        $RevealInstance.slide(0, 0);
+        setTimeout(() => {
+            $RevealInstance.sync();
+        }, 100);
     }
 
     async function saveSlides() {
@@ -111,12 +115,13 @@
                 >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        on:click={reset}
                         >New</button
                     >
-                    <button
+                    <!-- <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
                         >Open</button
-                    >
+                    > -->
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
                         on:click={saveSlides}>Export</button
