@@ -195,6 +195,10 @@
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Java</button
                     >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        on:click={setCurrentLanguage}>Sql</button
+                    >
                 </div>
             </div>
         </div>
