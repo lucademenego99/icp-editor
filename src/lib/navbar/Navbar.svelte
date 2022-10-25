@@ -15,7 +15,7 @@
         RevealInstance,
         deckName,
     } from "../../stores";
-    import Exporing from "../modals/Exporing.svelte";
+    import Exporting from "../modals/Exporting.svelte";
     import { Slide } from "../../classes/Slide";
 
     let currentDeckName = "untitled";
@@ -93,16 +93,13 @@
     }
 
     function setLayout(layout: Layouts): void {
-        console.log(
-            `Setting layout of ${$currentSlideH}, ${currentSlideV} to ${layout}`
-        );
         $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
 
         revealSlides.set($revealSlides);
     }
 </script>
 
-<Exporing show={savingFileDialog} />
+<Exporting show={savingFileDialog} />
 <nav class="flex flex-row items-center h-[30px] bg-[#1a1a1d]">
     <div class="flex flex-row items-center ml-2">
         <div

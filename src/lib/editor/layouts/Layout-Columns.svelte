@@ -80,7 +80,7 @@
             style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;"
+                style="width: 100%; height: 100%; display: flex; flex-direction: column; box-sizing: border-box; {col1Type == Types.TEXT ? 'text-align: start;' : 'justify-content: center; align-items: center;'}"
                 class="{col1Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"
@@ -104,7 +104,7 @@
             style="width: 100%; height: 100%; overflow: auto; flex: 1 1 auto;"
         >
             <div
-                style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;"
+                style="width: 100%; height: 100%; display: flex; flex-direction: column; box-sizing: border-box; {col2Type == Types.TEXT ? 'text-align: start;' : 'justify-content: center; align-items: center;'}"
                 class="{col2Type == undefined
                     ? 'w-full h-full border-2 border-[#aa2233]'
                     : ''}"

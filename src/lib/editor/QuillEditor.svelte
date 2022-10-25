@@ -32,6 +32,7 @@
                     [{ header: "2" }, "bold", "italic", "underline"],
                     [{ color: [] }, { background: [] }],
                     ["blockquote", "code-block", "link"],
+                    ['clean']
                 ],
             },
         });
