@@ -25,21 +25,27 @@
         class="w-5/6 h-5/6 bg-white bg-opacity-30 rounded-lg flex flex-col justify-evenly items-center"
     >
         <div
-            class=""
+            class="w-full h-full overflow-auto flex mx-10" style=""
         >
-            <div class="flex flex-row gap-10">
+            <div class="w-full h-full flex flex-row gap-4 mx-10" style="transform: scale(0.3) translateX(-75%);">
                 {#each slides as verticalSlides}
-                    <section>
-                        {#each verticalSlides as slide}
-                            {#if slide.layout == Layouts.BODY}
-                                <LayoutBody {slide} isOverview={true} />
-                            {:else if slide.layout == Layouts.MAIN}
-                                <LayoutMain {slide} isOverview={true} />
-                            {:else if slide.layout == Layouts.COLUMNS}
-                                <LayoutColumns {slide} isOverview={true} />
-                            {/if}
-                        {/each}
-                    </section>
+                    <div class="aspect-video flex-1 bg-gray-100 bg-opacity-20 w-full h-full" style="">
+                        <div class="reveal slide">
+                            <div class="slides">
+                                <section class="flex flex-col gap-4">
+                                {#each verticalSlides as slide}
+                                    {#if slide.layout == Layouts.BODY}
+                                        <LayoutBody {slide} isOverview={true} />
+                                    {:else if slide.layout == Layouts.MAIN}
+                                        <LayoutMain {slide} isOverview={true} />
+                                    {:else if slide.layout == Layouts.COLUMNS}
+                                        <LayoutColumns {slide} isOverview={true} />
+                                    {/if}
+                                {/each}
+                                </section>
+                            </div>
+                        </div>
+                    </div>
                 {/each}
             </div>
         </div>
