@@ -3,6 +3,9 @@
 
     import { RevealInstance, revealSlides, currentSlideH, currentLanguage } from "../../stores";
     import { Slide } from "../../classes/Slide";
+    import Overview from "../modals/Overview.svelte";
+
+    let showOverviewModal = false;
 
     const newSlide = () => {
         $revealSlides = [
@@ -39,6 +42,8 @@
 <aside
     class="float-right w-[15%] h-full box-border p-3 border-r-4 border-[#1a1a1d] flex flex-col items-center justify-center gap-5 overflow-y-auto"
 >
+    <Overview show={showOverviewModal} />
     <button on:click={newSlide}>New Slide</button>
     <button on:click={newVerticalSlide}>New vertical Slide</button>
+    <button on:click={() => {showOverviewModal = true}}>Slides overview</button>
 </aside>

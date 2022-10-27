@@ -18,7 +18,7 @@
                 Please provide an alt text for your image.
             </h3>
             <p class="text-gray-400 text-sm self-left">
-                It helps visually impaired users to understand it.
+                It helps those who cannot view the image to understand it.
             </p>
 
             <div>

@@ -4,6 +4,8 @@ export enum Layouts {
     COLUMNS = 2
 }
 
+export let LayoutsNames = ['title page', 'one big element', 'two columns'];
+
 export enum Types {
     TEXT = 0,
     CODE = 1,

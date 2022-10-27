@@ -16,9 +16,10 @@
     }
 
     export let slide: Slide;
+    export let isOverview: boolean = false;
 </script>
 
-<section bind:this={slide.html} class="{slideState()}">
+<section bind:this={slide.html} class="{slideState()}" style="{isOverview ? 'all: unset !important; border: 3px solid black !important;' : ''}">
     <!-- title class: custom style for titles -->
     <h3 class="title editable" contenteditable="true">Title</h3>
 
