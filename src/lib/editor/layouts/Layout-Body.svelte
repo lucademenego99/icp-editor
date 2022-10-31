@@ -1,13 +1,12 @@
 <script lang="ts">
     import type { Slide } from "../../../classes/Slide";
     import SelectElement from "../SelectElement.svelte";
-    import { currentSlideH, currentSlideV } from "../../../stores";
+    import { currentSlideH, currentSlideV, revealSlides } from "../../../stores";
     import { Types } from "../../../types";
     import Icp from "../ICP.svelte";
     import QuillEditor from "../QuillEditor.svelte";
 
     export let slide: Slide;
-    export let isOverview: boolean = false;
 
     let body: HTMLDivElement;
 
@@ -47,7 +46,7 @@
     }
 </script>
 
-<section bind:this={slide.html} class={slideState()} style="{isOverview ? 'all: unset !important; border: 3px solid black;' : ''}">
+<section bind:this={slide.html} class={slideState()}>
     <!-- title class: custom style for titles -->
     <h3 class="title" contenteditable="true">Title</h3>
 

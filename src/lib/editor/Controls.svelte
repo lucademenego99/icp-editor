@@ -45,5 +45,5 @@
     <Overview show={showOverviewModal} />
     <button on:click={newSlide}>New Slide</button>
     <button on:click={newVerticalSlide}>New vertical Slide</button>
-    <button on:click={() => {showOverviewModal = true}}>Slides overview</button>
+    <button on:click={() => {$revealSlides = [...$revealSlides]; showOverviewModal = true}}>Slides overview</button>
 </aside>

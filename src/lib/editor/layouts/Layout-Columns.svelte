@@ -8,7 +8,6 @@
     import QuillEditor from "../QuillEditor.svelte";
 
     export let slide: Slide;
-    export let isOverview: boolean = false;
 
     let QuillInstance;
 
@@ -72,7 +71,7 @@
     }
 </script>
 
-<section bind:this={slide.html} class="{slideState()}" style="{isOverview ? 'all: unset !important;' : ''}">
+<section bind:this={slide.html} class="{slideState()}" >
     <h3 class="title" contenteditable="true">Title</h3>
 
     <div style="width: 85%; height: 70%; display: flex; justify-content: space-around; align-items: center; gap: 2.5%">

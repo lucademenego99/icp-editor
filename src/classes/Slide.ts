@@ -24,25 +24,25 @@ export class Slide {
     getHtml() {
         let slide: string = this.html.innerHTML;
 
-        this.code = this.code.replaceAll('"', '&quot;');
+        const encodedCode = this.code.replaceAll('"', '&quot;');
 
         // Remove all occurrences of contenteditable=true from listOfSlidesHTML
         slide = slide.replace(/contenteditable="true"/g, "");
         
         // Add contenteditable=true when you find a <python-editor></python-editor> tag
-        slide = slide.replace(/<python-editor /g, `<python-editor contenteditable="true" code="${this.code}"`);
+        slide = slide.replace(/<python-editor /g, `<python-editor contenteditable="true" code="${encodedCode}"`);
 
         // Add contenteditable=true when you find a <java-editor></java-editor> tag
-        slide = slide.replace(/<java-editor /g, `<java-editor contenteditable="true" code="${this.code}"`);
+        slide = slide.replace(/<java-editor /g, `<java-editor contenteditable="true" code="${encodedCode}"`);
 
         // Add contenteditable=true when you find a <javascript-editor></javascript-editor> tag
-        slide = slide.replace(/<javascript-editor /g, `<javascript-editor contenteditable="true" code="${this.code}"`);
+        slide = slide.replace(/<javascript-editor /g, `<javascript-editor contenteditable="true" code="${encodedCode}"`);
 
         // Add contenteditable=true when you find a <typescript-editor></typescript-editor> tag
-        slide = slide.replace(/<typescript-editor /g, `<typescript-editor contenteditable="true" code="${this.code}"`);
+        slide = slide.replace(/<typescript-editor /g, `<typescript-editor contenteditable="true" code="${encodedCode}"`);
 
         // Add contenteditable=true when you find a <sql-editor></sql-editor> tag
-        slide = slide.replace(/<sql-editor /g, `<sql-editor contenteditable="true" code="${this.code}"`);
+        slide = slide.replace(/<sql-editor /g, `<sql-editor contenteditable="true" code="${encodedCode}"`);
 
         return slide;
     }

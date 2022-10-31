@@ -2,7 +2,6 @@
     import LayoutMain from "./layouts/Layout-Main.svelte";
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
-    import Login from "../navbar/Login.svelte";
     import { Layouts, LayoutsNames, type Language } from "../../types";
     import { saveAs } from "file-saver";
 

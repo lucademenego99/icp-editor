@@ -1,19 +1,7 @@
 <script lang="ts">
-    import type { Slide } from "../../classes/Slide";
     import { revealSlides } from "../../stores";
-    import { Layouts } from "../../types";
-    import LayoutBody from "../editor/layouts/Layout-Body.svelte";
-    import LayoutColumns from "../editor/layouts/Layout-Columns.svelte";
-    import LayoutMain from "../editor/layouts/Layout-Main.svelte";
 
     export let show: boolean = false;
-
-    let slides: Slide[][];
-
-    // Update the slides variable based on the store's value
-    revealSlides.subscribe((value) => {
-        slides = value;
-    });
 </script>
 
 <div
@@ -24,36 +12,68 @@
     <div
         class="w-5/6 h-5/6 bg-white bg-opacity-30 rounded-lg flex flex-col justify-evenly items-center"
     >
-        <div
-            class="w-full h-full overflow-auto flex mx-10" style=""
-        >
-            <div class="w-full h-full flex flex-row gap-4 mx-10" style="transform: scale(0.3) translateX(-75%);">
-                {#each slides as verticalSlides}
-                    <div class="aspect-video flex-1 bg-gray-100 bg-opacity-20 w-full h-full" style="">
-                        <div class="reveal slide">
-                            <div class="slides">
-                                <section class="flex flex-col gap-4">
-                                {#each verticalSlides as slide}
-                                    {#if slide.layout == Layouts.BODY}
-                                        <LayoutBody {slide} isOverview={true} />
-                                    {:else if slide.layout == Layouts.MAIN}
-                                        <LayoutMain {slide} isOverview={true} />
-                                    {:else if slide.layout == Layouts.COLUMNS}
-                                        <LayoutColumns {slide} isOverview={true} />
-                                    {/if}
+        <div class="w-full h-full overflow-auto flex mx-10" style="">
+            <div
+                class="reveal slide embedded focused has-horizontal-slides has-vertical-slides ready"
+                role="application"
+                data-transition-speed="default"
+                data-background-transition="fade"
+            >
+                <div class="slides-viewport arrange-mode">
+                    <div class="slides">
+                        {#each $revealSlides as verticalSlides, indexH}
+                            <section
+                                class="stack present"
+                                style="transform: translate3d({indexH *
+                                    1020}px, 0px, 0px);"
+                            >
+                                {#each verticalSlides as slide, indexV}
+                                    <section
+                                        style="transform: translate3d(0px, {indexV *
+                                            580}px, 0px);"
+                                    >
+                                        {@html slide.html
+                                            ? slide.getHtml()
+                                            : ""}
+                                    </section>
                                 {/each}
-                                </section>
-                            </div>
-                        </div>
+                            </section>
+                        {/each}
                     </div>
-                {/each}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    section {
-        all: unset !important;
+    .arrange-mode {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        overflow: auto;
+        z-index: 2;
+    }
+
+    .reveal .slides {
+        transform: scale(0.3) translate(-50%, -50%) scale(0.986615);
+        width: 960px;
+        height: 540px;
+        inset: 50% auto auto 50%;
+        top: 0 !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+
+    section section {
+        border: 2px solid white;
+        pointer-events: all !important;
+        cursor: grab;
+        z-index: 99;
+        display: block !important;
+        visibility: visible !important;
     }
 </style>
