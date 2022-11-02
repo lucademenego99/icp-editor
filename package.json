@@ -30,6 +30,7 @@
     "file-saver": "^2.0.5",
     "icp-bundle": "^0.1.3",
     "icp-create-server": "^1.0.0",
+    "interactjs": "^1.10.17",
     "quill": "^1.3.7",
     "reveal.js": "^4.3.1"
   }
