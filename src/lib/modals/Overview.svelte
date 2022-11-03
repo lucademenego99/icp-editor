@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { revealSlides, RevealInstance } from "../../stores";
+    import { revealSlides, RevealInstance, showOverview } from "../../stores";
     import interact from 'interactjs';
     import { onMount } from "svelte";
-
-    export let show: boolean = false;
+    import closeSVG from "../../assets/Close.svg?url";
 
     const position = { x: 0, y: 0 }
 
@@ -113,23 +112,33 @@
                         $RevealInstance.slide(newIndexH, newIndexV);
                         setTimeout(() => {
                             $RevealInstance.sync();
-                            show = false;
                         }, 100);
                     }
                 }
             }
         });
     })
+
+    // Set showOverview to false on esc key
+    function handleKeyDown (event) {
+        if (event.key == "Escape") {
+            showOverview.set(false);
+        }
+    }
 </script>
 
+<svelte:window on:keydown={handleKeyDown} />
 <div
-    class="transition-all absolute flex items-center justify-center top-0 left-0 w-full h-full bg-black/75 z-50 {show
+    class="transition-all absolute flex items-center justify-center top-0 left-0 w-full h-full bg-black/75 z-50 {$showOverview
         ? ''
         : 'hidden'}"
 >
     <div
-        class="w-5/6 h-5/6 bg-white bg-opacity-30 rounded-lg flex flex-col justify-evenly items-center"
+        class="w-[95%] h-[95%] relative bg-[#1a1a1d] rounded-lg flex flex-col justify-evenly items-center"
     >
+        <div class="transition-all absolute right-5 top-5 scale-110 cursor-pointer z-50 hover:scale-125" on:click={() => {showOverview.set(false)}}>
+            <img src="{closeSVG}" alt="Close modal">
+        </div>
         <div class="w-full h-full overflow-auto flex mx-10" style="">
             <div
                 class="reveal slide embedded focused has-horizontal-slides has-vertical-slides ready"

@@ -7,13 +7,13 @@
 	import customCSS from "./styles/custom-styles.css?url";
 
 	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
-    // import Overview from "./lib/modals/Overview.svelte";
+    import Overview from "./lib/modals/Overview.svelte";
 </script>
 
 <main class="flex flex-col w-full h-full bg-[#1a1a1d] text-white">
-	<!-- <Overview show={true} /> -->
 	<Navbar />
 	<Editor />
+	<Overview />
 </main>
 
 <svelte:head>

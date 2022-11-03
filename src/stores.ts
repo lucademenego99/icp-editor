@@ -36,3 +36,8 @@ export const currentLanguage: Writable<Language> = writable("typescript");
  * Name of the slide deck
  */
 export const deckName: Writable<string> = writable("untitled");
+
+/**
+ * Whether the overview mode is active or not
+ */
+export const showOverview: Writable<boolean> = writable(false);
