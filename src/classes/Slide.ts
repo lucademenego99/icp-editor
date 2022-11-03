@@ -1,20 +1,45 @@
-import type { Language, Layouts } from "src/types";
-import { RevealInstance } from "../stores";
+import { Layouts, type Language, type Types } from "../types";
+import { BodyTemplate, ColumnsTemplate, MainTemplate } from "./Templates";
 
 export class Slide {
     indexH: number;
     indexV: number;
     layout: Layouts;
-    html: HTMLElement;
     language: Language;
-    code: string;
+    template: any;
 
     constructor(indexH: number, indexV: number, language: Language, layout: Layouts) {
         this.indexH = indexH;
         this.indexV = indexV;
         this.layout = layout;
         this.language = language;
-        this.code = '';
+        switch (layout) {
+            case Layouts.BODY:
+                this.template = new BodyTemplate();
+                break;
+            case Layouts.COLUMNS:
+                this.template = new ColumnsTemplate();
+                break;
+            case Layouts.MAIN:
+                this.template = new MainTemplate();
+                break;
+        }
+    }
+
+    setLayout(layout: Layouts) {
+        switch (layout) {
+            case Layouts.BODY:
+                this.template = new BodyTemplate();
+                break;
+            case Layouts.COLUMNS:
+                this.template = new ColumnsTemplate();
+                console.log(this.template);
+                break;
+            case Layouts.MAIN:
+                this.template = new MainTemplate();
+                break;
+        }
+        this.layout = layout;
     }
 
     setLanguage(language: Language) {
@@ -22,28 +47,10 @@ export class Slide {
     }
 
     getHtml() {
-        let slide: string = this.html.innerHTML;
+        return this.template.getHtml();
+    }
 
-        const encodedCode = this.code.replaceAll('"', '&quot;');
-
-        // Remove all occurrences of contenteditable=true from listOfSlidesHTML
-        slide = slide.replace(/contenteditable="true"/g, "");
-        
-        // Add contenteditable=true when you find a <python-editor></python-editor> tag
-        slide = slide.replace(/<python-editor /g, `<python-editor contenteditable="true" code="${encodedCode}"`);
-
-        // Add contenteditable=true when you find a <java-editor></java-editor> tag
-        slide = slide.replace(/<java-editor /g, `<java-editor contenteditable="true" code="${encodedCode}"`);
-
-        // Add contenteditable=true when you find a <javascript-editor></javascript-editor> tag
-        slide = slide.replace(/<javascript-editor /g, `<javascript-editor contenteditable="true" code="${encodedCode}"`);
-
-        // Add contenteditable=true when you find a <typescript-editor></typescript-editor> tag
-        slide = slide.replace(/<typescript-editor /g, `<typescript-editor contenteditable="true" code="${encodedCode}"`);
-
-        // Add contenteditable=true when you find a <sql-editor></sql-editor> tag
-        slide = slide.replace(/<sql-editor /g, `<sql-editor contenteditable="true" code="${encodedCode}"`);
-
-        return slide;
+    getOverview() {
+        return this.template.getOverview();
     }
 }

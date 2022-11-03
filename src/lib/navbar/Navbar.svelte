@@ -92,9 +92,9 @@
     }
 
     function setLayout(layout: Layouts): void {
-        $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
+        $revealSlides[$currentSlideH][$currentSlideV].setLayout(layout);
 
-        revealSlides.set($revealSlides);
+        // revealSlides.set($revealSlides);
     }
 </script>
 

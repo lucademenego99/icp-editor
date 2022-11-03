@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
 
     export let boundsParent: HTMLDivElement;
+    export let quillDelta: any;
+    export let text: string;
 
     let textBody: HTMLDivElement;
 
@@ -17,7 +19,7 @@
         Quill.register(backgroundClass, true);
 
         // Create the editor
-        new Quill(textBody, {
+        const quill = new Quill(textBody, {
             theme: "bubble",    // Minimal UI - no always-visible toolbar on top
             bounds: boundsParent,   // Set bigger outer bounds to make the toolbar be always completely visible
             modules: {
@@ -36,6 +38,14 @@
                 ],
             },
         });
+        if (quillDelta)
+            quill.setContents(quillDelta);
+        else
+            quill.setText("Your text...");
+        quill.on('text-change', (data, oldContents, source) => {
+            text = quill.root.innerHTML;
+            quillDelta = quill.getContents();
+        });
     });
 </script>
 
@@ -43,7 +53,6 @@
     style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important"
     bind:this={textBody}
 >
-    Your text...
 </div>
 
 <style>

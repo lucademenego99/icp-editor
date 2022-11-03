@@ -42,7 +42,7 @@
 <aside
     class="float-right w-[15%] h-full box-border p-3 border-r-4 border-[#1a1a1d] flex flex-col items-center justify-center gap-5 overflow-y-auto"
 >
-    <Overview show={showOverviewModal} />
+    <Overview bind:show={showOverviewModal} />
     <button on:click={newSlide}>New Slide</button>
     <button on:click={newVerticalSlide}>New vertical Slide</button>
     <button on:click={() => {$revealSlides = [...$revealSlides]; showOverviewModal = true}}>Slides overview</button>

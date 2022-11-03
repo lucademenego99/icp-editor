@@ -18,10 +18,10 @@
     export let slide: Slide;
 </script>
 
-<section bind:this={slide.html} class="{slideState()}">
+<section bind:this={slide.template.html} class="{slideState()}">
     <!-- title class: custom style for titles -->
-    <h3 class="title editable" contenteditable="true">Title</h3>
+    <h3 class="title editable" contenteditable="true" bind:textContent={slide.template.title}></h3>
 
     <!-- subtitle class: custom style for subtitles -->
-    <p class="subtitle editable" contenteditable="true">Subtitle</p>
+    <p class="subtitle editable" contenteditable="true" bind:textContent={slide.template.subtitle}></p>
 </section>

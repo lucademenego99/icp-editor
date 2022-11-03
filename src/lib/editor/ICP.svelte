@@ -3,6 +3,7 @@
     import type { Slide } from "../../classes/Slide";
 
     export let slide: Slide;
+    export let code: string;
     export let type: "vertical" | "normal" = "normal";
 
     let editorParent: HTMLDivElement;
@@ -10,7 +11,7 @@
     onMount(() => {
         editorParent.addEventListener("changedcode", (e: any) => {
             if (e.detail.content)
-                slide.code = e.detail.content;
+                code = e.detail.content;
         });
     });
 </script>
@@ -21,7 +22,7 @@
         contenteditable="true"
         theme="dark"
         type={type}
-        code=""
+        code={code}
         style="height: 100%; width: 100%;"
     />
 {:else if slide.language == "javascript"}
@@ -29,7 +30,7 @@
         contenteditable="true"
         theme="dark"
         type={type}
-        code=""
+        code={code}
         style="height: 100%; width: 100%;"
     />
 {:else if slide.language == "typescript"}
@@ -37,7 +38,7 @@
         contenteditable="true"
         theme="dark"
         type={type}
-        code=""
+        code={code}
         style="height: 100%; width: 100%;"
     />
 {:else if slide.language == "java"}
@@ -45,7 +46,7 @@
         contenteditable="true"
         theme="dark"
         type={type}
-        code=""
+        code={code}
         style="height: 100%; width: 100%;"
     />
 {:else if slide.language == "sql"}
@@ -53,7 +54,7 @@
         contenteditable="true"
         theme="dark"
         type={type}
-        code=""
+        code={code}
         style="height: 100%; width: 100%;"
     />
 {/if}

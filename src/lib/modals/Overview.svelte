@@ -1,22 +1,17 @@
 <script lang="ts">
-    import { revealSlides } from "../../stores";
+    import { revealSlides, RevealInstance } from "../../stores";
     import interact from 'interactjs';
     import { onMount } from "svelte";
 
     export let show: boolean = false;
 
     const position = { x: 0, y: 0 }
-    let oldTranslateY = 0;
 
     const slideHeight = 540;
     const slideWidth = 960;
 
     function startDrag(event) {
-        // const clone: HTMLElement = event.target.cloneNode(true);
-        // clone.classList.add("draggable");
-
         event.target.classList.add("draggable");
-
     }
 
     onMount(() => {
@@ -29,7 +24,26 @@
                     position.y += event.dy / 0.3;
                     // console.log(position.y);
                     event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
-                    console.log(event.target.style.transform);
+
+                    // console.log("POS", event.clientX, event.clientY);
+                    const places = document.querySelectorAll(".move-slide-bar");
+                    for (let place of places) {
+                        if (place) {
+                            const rect = place.getBoundingClientRect();
+                            let toAddX = 0, toAddY = 0;
+                            if (rect.right - rect.left > 20) {
+                                toAddY = 30;
+                            } else {
+                                toAddX = 30;
+                            }
+
+                            if (event.clientX > rect.left - toAddX && event.clientX < rect.right + toAddX && event.clientY > rect.top - toAddY && event.clientY < rect.bottom + toAddY) {
+                                place.classList.remove("opacity-0");
+                            } else {
+                                place.classList.add("opacity-0");
+                            }
+                        }
+                    }
                 }
             }
         }).on('move', (event) => {
@@ -37,17 +51,18 @@
 
             // if the pointer was moved while being held down
             // and an interaction hasn't started yet
-            if (interaction.pointerIsDown && !interaction.interacting()) {
+            console.log(event.target.tagName);
+            if (event.target.tagName == 'SECTION' && interaction.pointerIsDown && !interaction.interacting()) {
                 var original = event.target,
                     // create a clone of the target element
                     clone = event.target.cloneNode(true);
 
-                // Remove default transition
-                clone.style.transition = "unset";
-                position.y = clone.style.transform.split(",")[1].split("px")[0].trim().replace(/[^\d.]/g, '');
-
                 // insert the clone to the page
                 original.parentNode.appendChild(clone);
+
+                // Remove default transition
+                clone.style.transition = "unset";
+                position.y = new WebKitCSSMatrix(getComputedStyle(original).transform).f;
 
                 // start a drag interaction targeting the clone
                 interaction.start({ name: 'drag' }, event.interactable, clone);
@@ -57,8 +72,52 @@
             position.x = 0;
             position.y = 0;
 
+            const oldIndexH = parseInt(event.target.getAttribute("data-h"));
+            const oldIndexV = parseInt(event.target.getAttribute("data-v"));
+
             // Remove the cloned element from the DOM
             event.target.remove();
+
+            const places = document.querySelectorAll(".move-slide-bar");
+            for (let place of places) {
+                if (!place.classList.contains("opacity-0")) {
+                    place.classList.add("opacity-0");
+
+                    // Get new index
+                    const newIndexH = parseInt(place.getAttribute("data-h"));
+                    const newIndexV = parseInt(place.getAttribute("data-v"));
+                    const direction = place.getAttribute("data-direction");
+                    console.log("Moving slide {" + oldIndexH + "-" + oldIndexV + "} to {" + newIndexH + "-" + (newIndexV) + "}" + "  direction " + direction);
+
+                    // Check if oldIndexH is not NaN
+                    if (!isNaN(oldIndexH) && !isNaN(oldIndexV) && !isNaN(newIndexH) && !isNaN(newIndexV) &&
+                        !((oldIndexH == newIndexH && oldIndexV == newIndexV-1)) &&
+                        !(oldIndexH == newIndexH && newIndexV == 0)) {
+                        // Move the slide to the new position
+                        revealSlides.update((slides) => {
+                            const oldSlide = slides[oldIndexH][oldIndexV];
+                            slides[oldIndexH].splice(oldIndexV, 1);
+                            if (direction == "horizontal") {
+                                slides.splice(newIndexH, 0, [oldSlide]);
+                            } else {
+                                const isSplicedV = (oldIndexV < newIndexV && oldIndexH == newIndexH);
+                                slides[newIndexH].splice(newIndexV-Number(isSplicedV), 0, oldSlide);
+                            }
+                            if (slides[oldIndexH].length == 0) {
+                                slides.splice(oldIndexH, 1);
+                            }
+                            return slides;
+                        });
+                        console.log("Slides after update:", $revealSlides);
+
+                        $RevealInstance.slide(newIndexH, newIndexV);
+                        setTimeout(() => {
+                            $RevealInstance.sync();
+                            show = false;
+                        }, 100);
+                    }
+                }
+            }
         });
     })
 </script>
@@ -81,23 +140,25 @@
                 <div class="slides-viewport arrange-mode">
                     <div class="slides">
                         {#each $revealSlides as verticalSlides, indexH}
-                        <div class="move-slide-bar absolute h-full w-[5px] bg-blue-500" style="transform: translate3d({indexH * (slideWidth + 50) - 27.5}px, 0px, 0px)"></div>
+                        <div data-h="{indexH + 1}" data-v="{0}" data-direction="horizontal" class="transition-opacity opacity-0 move-slide-bar absolute h-full w-[5px] bg-blue-500" style="transform: translate3d({(indexH+1) * (slideWidth + 50) - 27.5}px, 0px, 0px)"></div>
                             <section
                                 class="stack present"
                                 style="transform: translate3d({indexH *
                                     (slideWidth + 50)}px, 0px, 0px);"
                             >
+                            <div data-h="{indexH}" data-v="{0}" data-direction="vertical" class="transition-opacity opacity-0 move-slide-bar absolute w-[90%] h-[5px] bg-blue-500" style="transform: translate3d(0px, {-slideHeight / 2 - 27.5}px, 0px)"></div>
                                 {#each verticalSlides as slide, indexV}
                                     <section
+                                        data-h="{indexH}" data-v="{indexV}"
                                         on:mousedown={startDrag}
                                         style="transform: translate3d(0px, {indexV *
                                             (slideHeight + 50)}px, 0px);"
                                     >
-                                        {@html slide.html
-                                            ? slide.getHtml()
+                                        {@html slide.template?.html || slide.template?.column1?.html
+                                            ? slide.getOverview()
                                             : ""}
                                     </section>
-                                    <div class="move-slide-bar absolute w-[90%] h-[5px] bg-blue-500" style="transform: translate3d(0px, {(indexV * (slideHeight + 50)) + (slideHeight / 2 + 27.5)}px, 0px)"></div>
+                                    <div data-h="{indexH}" data-v="{indexV+1}" data-direction="vertical" class="transition-opacity opacity-0 move-slide-bar absolute w-[90%] h-[5px] bg-blue-500" style="transform: translate3d(0px, {(indexV * (slideHeight + 50)) + (slideHeight / 2 + 27.5)}px, 0px)"></div>
                                 {/each}
                             </section>
                         {/each}
@@ -138,9 +199,5 @@
         z-index: 99;
         display: block !important;
         visibility: visible !important;
-    }
-
-    .move-slide-bar {
-        
     }
 </style>
