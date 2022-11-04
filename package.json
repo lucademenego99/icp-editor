@@ -32,6 +32,7 @@
     "icp-create-server": "^1.0.0",
     "interactjs": "^1.10.17",
     "quill": "^1.3.7",
-    "reveal.js": "^4.3.1"
+    "reveal.js": "^4.3.1",
+    "uuid": "^9.0.0"
   }
 }

@@ -1,6 +1,6 @@
 <!-- Initialize reveal -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import Reveal from "reveal.js";
 
     import LayoutMain from "./layouts/Layout-Main.svelte";
@@ -16,14 +16,6 @@
         currentSlideV,
     } from "../../stores";
     import { Layouts } from "../../types";
-    import type { Slide } from "src/classes/Slide";
-
-    let slides: Slide[][];
-
-    // Update the slides variable based on the store's value
-    revealSlides.subscribe((value) => {
-        slides = value;
-    });
 
     function removeCurrentSlide(event) {
         // Prevent the event from bubbling up to the parent element
@@ -41,14 +33,15 @@
         }
 
         // Remove the slide the user requested for removal
-        slides[toRemoveH].splice(toRemoveV, 1);
+        revealSlides.update((slides) => {
+            slides[toRemoveH].splice(toRemoveV, 1);
 
-        if (slides[toRemoveH].length == 0) {
-            slides.splice(toRemoveH, 1);
-        }
+            if (slides[toRemoveH].length == 0) {
+                slides.splice(toRemoveH, 1);
+            }
 
-        // Update the store
-        revealSlides.set(slides);
+            return slides;
+        });
 
         // Synchronize the Reveal instance
         setTimeout(() => {
@@ -89,15 +82,15 @@
             embedded: false,
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
-        });
+        }).then(() => {
+            Reveal.addEventListener("slidechanged", (e) => {
+                console.log("Changed slide to ", e.indexh, e.indexv);
+                $currentSlideH = e.indexh;
+                $currentSlideV = e.indexv;
+            });
 
-        Reveal.addEventListener("slidechanged", (e) => {
-            console.log("Changed slide to ", e.indexh, e.indexv);
-            $currentSlideH = e.indexh;
-            $currentSlideV = e.indexv;
+            $RevealInstance = Reveal;
         });
-
-        $RevealInstance = Reveal;
     });
 </script>
 
@@ -116,15 +109,15 @@
         data-background-transition="fade"
     >
         <div class="slides">
-            {#each slides as verticalSlides}
+            {#each $revealSlides as verticalSlides, index (index)}
                 <section>
-                    {#each verticalSlides as slide}
+                    {#each verticalSlides as slide (slide.id)}
                         {#if slide.layout == Layouts.BODY}
-                            <LayoutBody {slide} />
+                            <LayoutBody bind:slide={slide} />
                         {:else if slide.layout == Layouts.MAIN}
-                            <LayoutMain {slide} />
+                            <LayoutMain bind:slide={slide} />
                         {:else if slide.layout == Layouts.COLUMNS}
-                            <LayoutColumns {slide} />
+                            <LayoutColumns bind:slide={slide} />
                         {/if}
                     {/each}
                 </section>

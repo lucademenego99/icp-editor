@@ -1,13 +1,37 @@
 <script lang="ts">
-    import { revealSlides, RevealInstance, showOverview } from "../../stores";
+    import { revealSlides, RevealInstance, showOverview, currentSlideH, currentSlideV } from "../../stores";
     import interact from 'interactjs';
     import { onMount } from "svelte";
     import closeSVG from "../../assets/Close.svg?url";
+    import { v4 as uuidv4 } from 'uuid';
+    import type { Slide } from "../../classes/Slide";
 
     const position = { x: 0, y: 0 }
 
+    let slides: Slide[][] = [[]];
     const slideHeight = 540;
     const slideWidth = 960;
+
+    function moveToSlide(h, v) {
+        $RevealInstance.slide(h, v);
+        currentSlideH.set(h);
+        currentSlideV.set(v);
+        setTimeout(() => {
+            $RevealInstance.sync();
+        }, 150);
+    }
+
+    $: {
+        if ($showOverview == false && $RevealInstance) {
+            slides = $revealSlides;
+        }
+    }
+
+    function removeOverview() {
+        moveToSlide(0, 0);
+        revealSlides.set([...slides]);
+        showOverview.set(false);
+    }
 
     function startDrag(event) {
         event.target.classList.add("draggable");
@@ -92,27 +116,42 @@
                     if (!isNaN(oldIndexH) && !isNaN(oldIndexV) && !isNaN(newIndexH) && !isNaN(newIndexV) &&
                         !((oldIndexH == newIndexH && oldIndexV == newIndexV-1)) &&
                         !(oldIndexH == newIndexH && newIndexV == 0)) {
-                        // Move the slide to the new position
-                        revealSlides.update((slides) => {
-                            const oldSlide = slides[oldIndexH][oldIndexV];
-                            slides[oldIndexH].splice(oldIndexV, 1);
-                            if (direction == "horizontal") {
-                                slides.splice(newIndexH, 0, [oldSlide]);
-                            } else {
-                                const isSplicedV = (oldIndexV < newIndexV && oldIndexH == newIndexH);
-                                slides[newIndexH].splice(newIndexV-Number(isSplicedV), 0, oldSlide);
-                            }
-                            if (slides[oldIndexH].length == 0) {
-                                slides.splice(oldIndexH, 1);
-                            }
-                            return slides;
-                        });
-                        console.log("Slides after update:", $revealSlides);
 
-                        $RevealInstance.slide(newIndexH, newIndexV);
-                        setTimeout(() => {
-                            $RevealInstance.sync();
-                        }, 100);
+                        // Move the slide to the new position
+                        const oldSlide = slides[oldIndexH][oldIndexV];
+                        slides[oldIndexH].splice(oldIndexV, 1);
+                        if (direction == "horizontal") {
+                            slides.splice(newIndexH, 0, [oldSlide]);
+                        } else {
+                            const isSplicedV = (oldIndexV < newIndexV && oldIndexH == newIndexH);
+                            oldSlide.indexV = newIndexV-Number(isSplicedV);
+                            slides[newIndexH].splice(newIndexV-Number(isSplicedV), 0, oldSlide);
+                        }
+                        if (slides[oldIndexH].length == 0) {
+                            slides.splice(oldIndexH, 1);
+                        } else if (slides[oldIndexH + 1] && slides[oldIndexH + 1].length == 0) {
+                            slides.splice(oldIndexH + 1, 1);
+                        }
+
+                        // Loop through all slides and update their index
+                        for (let i = 0; i < slides.length; i++) {
+                            for (let j = 0; j < slides[i].length; j++) {
+                                if (slides[i][j].indexH != i || slides[i][j].indexV != j) {
+                                    slides[i][j].id = uuidv4();
+                                    slides[i][j].indexH = i;
+                                    slides[i][j].indexV = j;
+                                }
+                            }
+                        }
+                        
+                        let newSlides = [];
+                        for(let i = 0; i < slides.length; i++) {
+                            newSlides.push([]);
+                            for(let j = 0; j < slides[i].length; j++) {
+                                newSlides[i].push(slides[i][j]);
+                            }
+                        }
+                        slides = [...newSlides];
                     }
                 }
             }
@@ -122,7 +161,7 @@
     // Set showOverview to false on esc key
     function handleKeyDown (event) {
         if (event.key == "Escape") {
-            showOverview.set(false);
+            removeOverview();
         }
     }
 </script>
@@ -136,7 +175,7 @@
     <div
         class="w-[95%] h-[95%] relative bg-[#1a1a1d] rounded-lg flex flex-col justify-evenly items-center"
     >
-        <div class="transition-all absolute right-5 top-5 scale-110 cursor-pointer z-50 hover:scale-125" on:click={() => {showOverview.set(false)}}>
+        <div class="transition-all absolute right-5 top-5 scale-110 cursor-pointer z-50 hover:scale-125" on:click={removeOverview}>
             <img src="{closeSVG}" alt="Close modal">
         </div>
         <div class="w-full h-full overflow-auto flex mx-10" style="">
@@ -148,7 +187,7 @@
             >
                 <div class="slides-viewport arrange-mode">
                     <div class="slides">
-                        {#each $revealSlides as verticalSlides, indexH}
+                        {#each slides as verticalSlides, indexH (indexH)}
                         <div data-h="{indexH + 1}" data-v="{0}" data-direction="horizontal" class="transition-opacity opacity-0 move-slide-bar absolute h-full w-[5px] bg-blue-500" style="transform: translate3d({(indexH+1) * (slideWidth + 50) - 27.5}px, 0px, 0px)"></div>
                             <section
                                 class="stack present"
@@ -156,7 +195,7 @@
                                     (slideWidth + 50)}px, 0px, 0px);"
                             >
                             <div data-h="{indexH}" data-v="{0}" data-direction="vertical" class="transition-opacity opacity-0 move-slide-bar absolute w-[90%] h-[5px] bg-blue-500" style="transform: translate3d(0px, {-slideHeight / 2 - 27.5}px, 0px)"></div>
-                                {#each verticalSlides as slide, indexV}
+                                {#each verticalSlides as slide, indexV (slide.id)}
                                     <section
                                         data-h="{indexH}" data-v="{indexV}"
                                         on:mousedown={startDrag}

@@ -1,7 +1,9 @@
 import { Layouts, type Language, type Types } from "../types";
 import { BodyTemplate, ColumnsTemplate, MainTemplate } from "./Templates";
+import { v4 as uuidv4 } from 'uuid';
 
 export class Slide {
+    id: string;
     indexH: number;
     indexV: number;
     layout: Layouts;
@@ -9,6 +11,7 @@ export class Slide {
     template: any;
 
     constructor(indexH: number, indexV: number, language: Language, layout: Layouts) {
+        this.id = uuidv4();
         this.indexH = indexH;
         this.indexV = indexV;
         this.layout = layout;
@@ -33,7 +36,6 @@ export class Slide {
                 break;
             case Layouts.COLUMNS:
                 this.template = new ColumnsTemplate();
-                console.log(this.template);
                 break;
             case Layouts.MAIN:
                 this.template = new MainTemplate();

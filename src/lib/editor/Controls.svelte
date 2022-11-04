@@ -41,5 +41,5 @@
 >
     <button on:click={newSlide}>New Slide</button>
     <button on:click={newVerticalSlide}>New vertical Slide</button>
-    <button on:click={() => {$revealSlides = [...$revealSlides]; showOverview.set(true)}}>Slides overview</button>
+    <button on:click={() => {revealSlides.set([...$revealSlides]); showOverview.set(true)}}>Slides overview</button>
 </aside>
