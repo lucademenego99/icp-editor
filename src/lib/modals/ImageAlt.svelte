@@ -1,8 +1,7 @@
 <script lang="ts">
     export let show: boolean = false;
+    export let alt: string = "";
     export let onConfirm: (alt: string) => void;
-
-    let altText: string;
 </script>
 
 <div
@@ -26,9 +25,9 @@
                     type="text"
                     class="w-full border border-gray-300 rounded-md p-2"
                     placeholder="Alt text"
-                    bind:value={altText}
+                    bind:value={alt}
                 />
-                <button on:click={() => onConfirm(altText)}>Done</button>
+                <button on:click={() => onConfirm(alt)}>Done</button>
             </div>
         </div>
     </div>
@@ -68,7 +67,7 @@
         color: #fff;
         border: none;
         border-radius: 0.5em;
-        transition: all 0.150s ease-in-out;
+        transition: all 0.15s ease-in-out;
     }
 
     button:hover {

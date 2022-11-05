@@ -109,8 +109,7 @@
                 >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={reset}
-                        >New</button
+                        on:click={reset}>New</button
                     >
                     <!-- <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
@@ -132,16 +131,15 @@
         >
             <p class="py-1 px-2 text-sm">Help</p>
         </div>
-        <div
-            class="ml-6 h-[10px] border-r-[1px] border-white"
-        />
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
         <div
             class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">
-                    <strong>Selected Layout</strong> - {LayoutsNames[$revealSlides[$currentSlideH][$currentSlideV]
-                        .layout]}
+                    <strong>Selected Layout</strong> - {LayoutsNames[
+                        $revealSlides[$currentSlideH][$currentSlideV].layout
+                    ]}
                 </p>
                 <div
                     class="transform-modal-body dropdown-content absolute m-0 p-1 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:grid"
@@ -164,9 +162,7 @@
                 </div>
             </div>
         </div>
-        <div
-            class="ml-6 h-[10px] border-r-[1px] border-white"
-        />
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
         <div
             class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
         >
@@ -202,17 +198,15 @@
                 </div>
             </div>
         </div>
-        <div
-            class="ml-6 h-[10px] border-r-[1px] border-white"
-        />
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
         <div class="flex flex-row ml-6">
-            <p class="py-1 px-2 text-sm"><strong>Slide Deck name</strong> - </p>
+            <p class="py-1 px-2 text-sm"><strong>Slide Deck name</strong> -</p>
             <p
                 bind:innerHTML={currentDeckName}
                 class="py-1 text-sm editable"
                 contenteditable="true"
             >
-            {$deckName}
+                {$deckName}
             </p>
         </div>
     </div>

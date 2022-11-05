@@ -20,8 +20,8 @@
 
         // Create the editor
         const quill = new Quill(textBody, {
-            theme: "bubble",    // Minimal UI - no always-visible toolbar on top
-            bounds: boundsParent,   // Set bigger outer bounds to make the toolbar be always completely visible
+            theme: "bubble", // Minimal UI - no always-visible toolbar on top
+            bounds: boundsParent, // Set bigger outer bounds to make the toolbar be always completely visible
             modules: {
                 // Custom toolbar with:
                 // - header 2 for semi-title
@@ -34,15 +34,13 @@
                     [{ header: "2" }, "bold", "italic", "underline"],
                     [{ color: [] }, { background: [] }],
                     ["blockquote", "code-block", "link"],
-                    ['clean']
+                    ["clean"],
                 ],
             },
         });
-        if (quillDelta)
-            quill.setContents(quillDelta);
-        else
-            quill.setText("Your text...");
-        quill.on('text-change', (data, oldContents, source) => {
+        if (quillDelta) quill.setContents(quillDelta);
+        else quill.setText("Your text...");
+        quill.on("text-change", (data, oldContents, source) => {
             text = quill.root.innerHTML;
             quillDelta = quill.getContents();
         });
@@ -52,8 +50,7 @@
 <div
     style="width: 100%; padding: 0 8%; box-sizing: border-box; font-size: 25px !important"
     bind:this={textBody}
->
-</div>
+/>
 
 <style>
     @import "https://cdn.quilljs.com/1.3.6/quill.bubble.css";

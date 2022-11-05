@@ -99,8 +99,18 @@
     data-page="icp"
     style="box-sizing: border-box; width: 100%; height: 100%; transition: transform 0.8s ease 0s;"
 >
-    <div class="transition-all absolute top-0 right-0 p-4 z-50 {$currentSlideH == 0 ? 'opacity-0' : 'opacity-100'}" on:click={removeCurrentSlide}>
-        <img class="cursor-pointer scale-75" src="{TrashSVG}" alt="Delete the current slide" />
+    <div
+        class="transition-all absolute top-0 right-0 p-4 z-40 {$currentSlideH ==
+        0
+            ? 'opacity-0'
+            : 'opacity-100'}"
+        on:click={removeCurrentSlide}
+    >
+        <img
+            class="cursor-pointer scale-75"
+            src={TrashSVG}
+            alt="Delete the current slide"
+        />
     </div>
     <div
         class="reveal slide focused has-horizontal-slides ready"
@@ -113,11 +123,11 @@
                 <section>
                     {#each verticalSlides as slide (slide.id)}
                         {#if slide.layout == Layouts.BODY}
-                            <LayoutBody bind:slide={slide} />
+                            <LayoutBody bind:slide />
                         {:else if slide.layout == Layouts.MAIN}
-                            <LayoutMain bind:slide={slide} />
+                            <LayoutMain bind:slide />
                         {:else if slide.layout == Layouts.COLUMNS}
-                            <LayoutColumns bind:slide={slide} />
+                            <LayoutColumns bind:slide />
                         {/if}
                     {/each}
                 </section>
