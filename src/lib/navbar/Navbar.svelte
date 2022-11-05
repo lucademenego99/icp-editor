@@ -2,8 +2,7 @@
     import LayoutMain from "./layouts/Layout-Main.svelte";
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
-    import Login from "../navbar/Login.svelte";
-    import { Layouts, type Language } from "../../types";
+    import { Layouts, LayoutsNames, type Language } from "../../types";
     import { saveAs } from "file-saver";
 
     import {
@@ -34,7 +33,7 @@
         }, 100);
     }
 
-    async function saveSlides() {
+    async function saveSlidesRedbean() {
         // Start the dialog showing the user that the file is being generated
         savingFileDialog = true;
 
@@ -93,9 +92,7 @@
     }
 
     function setLayout(layout: Layouts): void {
-        $revealSlides[$currentSlideH][$currentSlideV].layout = layout;
-
-        revealSlides.set($revealSlides);
+        $revealSlides[$currentSlideH][$currentSlideV].setLayout(layout);
     }
 </script>
 
@@ -112,8 +109,7 @@
                 >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={reset}
-                        >New</button
+                        on:click={reset}>New</button
                     >
                     <!-- <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
@@ -121,7 +117,11 @@
                     > -->
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={saveSlides}>Export</button
+                        on:click={saveSlidesRedbean}>Export Redbean</button
+                    >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        on:click={() => {}}>Export HTML</button
                     >
                 </div>
             </div>
@@ -131,17 +131,15 @@
         >
             <p class="py-1 px-2 text-sm">Help</p>
         </div>
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
         <div
-            style="border-right: 1px solid white; margin-left: 2em; height: 10px;"
-        />
-        <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group"
-            style="margin-left: 2em;"
+            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">
-                    Layout {$revealSlides[$currentSlideH][$currentSlideV]
-                        .layout + 1}
+                    <strong>Selected Layout</strong> - {LayoutsNames[
+                        $revealSlides[$currentSlideH][$currentSlideV].layout
+                    ]}
                 </p>
                 <div
                     class="transform-modal-body dropdown-content absolute m-0 p-1 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:grid"
@@ -164,15 +162,13 @@
                 </div>
             </div>
         </div>
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
         <div
-            style="border-right: 1px solid white; margin-left: 2em; height: 10px;"
-        />
-        <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group"
-            style="margin-left: 2em;"
+            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">
+                    <strong>Selected language</strong> -
                     {$currentLanguage.charAt(0).toUpperCase() +
                         $currentLanguage.slice(1)}
                 </p>
@@ -202,20 +198,19 @@
                 </div>
             </div>
         </div>
-        <div
-            style="border-right: 1px solid white; margin-left: 2em; height: 10px;"
-        />
-        <div style="margin-left: 2em;">
+        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
+        <div class="flex flex-row ml-6">
+            <p class="py-1 px-2 text-sm"><strong>Slide Deck name</strong> -</p>
             <p
                 bind:innerHTML={currentDeckName}
-                class="py-1 px-2 text-sm editable"
+                class="py-1 text-sm editable"
                 contenteditable="true"
             >
                 {$deckName}
             </p>
         </div>
     </div>
-    <Login />
+    <!-- <Login /> -->
 </nav>
 
 <style>

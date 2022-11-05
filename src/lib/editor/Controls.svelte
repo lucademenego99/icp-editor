@@ -1,13 +1,26 @@
 <script lang="ts">
     import { Layouts } from "../../types";
 
-    import { RevealInstance, revealSlides, currentSlideH, currentLanguage } from "../../stores";
+    import {
+        RevealInstance,
+        revealSlides,
+        currentSlideH,
+        currentLanguage,
+        showOverview,
+    } from "../../stores";
     import { Slide } from "../../classes/Slide";
 
     const newSlide = () => {
         $revealSlides = [
             ...$revealSlides,
-            [new Slide($revealSlides.length, 0, $currentLanguage, Layouts.BODY)],
+            [
+                new Slide(
+                    $revealSlides.length,
+                    0,
+                    $currentLanguage,
+                    Layouts.BODY
+                ),
+            ],
         ];
         $RevealInstance.sync();
         setTimeout(() => {
@@ -41,4 +54,10 @@
 >
     <button on:click={newSlide}>New Slide</button>
     <button on:click={newVerticalSlide}>New vertical Slide</button>
+    <button
+        on:click={() => {
+            revealSlides.set([...$revealSlides]);
+            showOverview.set(true);
+        }}>Slides overview</button
+    >
 </aside>

@@ -1,11 +1,13 @@
 <!-- Initialize reveal -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import Reveal from "reveal.js";
 
     import LayoutMain from "./layouts/Layout-Main.svelte";
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
+
+    import TrashSVG from "../../assets/Trash.svg?url";
 
     import {
         RevealInstance,
@@ -14,14 +16,38 @@
         currentSlideV,
     } from "../../stores";
     import { Layouts } from "../../types";
-    import type { Slide } from "src/classes/Slide";
 
-    let slides: Slide[][];
+    function removeCurrentSlide(event) {
+        // Prevent the event from bubbling up to the parent element
+        event.stopPropagation();
 
-    // Update the slides variable based on the store's value
-    revealSlides.subscribe((value) => {
-        slides = value;
-    });
+        // Store which slide is currently selected
+        const toRemoveH = $currentSlideH;
+        const toRemoveV = $currentSlideV;
+
+        // Move to the previous slide
+        if ($currentSlideV == 0) {
+            $RevealInstance.slide($currentSlideH - 1, 0);
+        } else {
+            $RevealInstance.slide($currentSlideH, $currentSlideV - 1);
+        }
+
+        // Remove the slide the user requested for removal
+        revealSlides.update((slides) => {
+            slides[toRemoveH].splice(toRemoveV, 1);
+
+            if (slides[toRemoveH].length == 0) {
+                slides.splice(toRemoveH, 1);
+            }
+
+            return slides;
+        });
+
+        // Synchronize the Reveal instance
+        setTimeout(() => {
+            $RevealInstance.sync();
+        }, 100);
+    }
 
     onMount(() => {
         Reveal.initialize({
@@ -56,15 +82,15 @@
             embedded: false,
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
-        });
+        }).then(() => {
+            Reveal.addEventListener("slidechanged", (e) => {
+                console.log("Changed slide to ", e.indexh, e.indexv);
+                $currentSlideH = e.indexh;
+                $currentSlideV = e.indexv;
+            });
 
-        Reveal.addEventListener("slidechanged", (e) => {
-            console.log("Changed slide to ", e.indexh, e.indexv);
-            $currentSlideH = e.indexh;
-            $currentSlideV = e.indexv;
+            $RevealInstance = Reveal;
         });
-
-        $RevealInstance = Reveal;
     });
 </script>
 
@@ -74,21 +100,34 @@
     style="box-sizing: border-box; width: 100%; height: 100%; transition: transform 0.8s ease 0s;"
 >
     <div
+        class="transition-all absolute top-0 right-0 p-4 z-40 {$currentSlideH ==
+        0
+            ? 'opacity-0'
+            : 'opacity-100'}"
+        on:click={removeCurrentSlide}
+    >
+        <img
+            class="cursor-pointer scale-75"
+            src={TrashSVG}
+            alt="Delete the current slide"
+        />
+    </div>
+    <div
         class="reveal slide focused has-horizontal-slides ready"
         role="application"
         data-transition-speed="default"
         data-background-transition="fade"
     >
         <div class="slides">
-            {#each slides as verticalSlides}
+            {#each $revealSlides as verticalSlides, index (index)}
                 <section>
-                    {#each verticalSlides as slide}
+                    {#each verticalSlides as slide (slide.id)}
                         {#if slide.layout == Layouts.BODY}
-                            <LayoutBody {slide} />
+                            <LayoutBody bind:slide />
                         {:else if slide.layout == Layouts.MAIN}
-                            <LayoutMain {slide} />
+                            <LayoutMain bind:slide />
                         {:else if slide.layout == Layouts.COLUMNS}
-                            <LayoutColumns {slide} />
+                            <LayoutColumns bind:slide />
                         {/if}
                     {/each}
                 </section>

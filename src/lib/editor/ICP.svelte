@@ -1,60 +1,66 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { Slide } from "../../classes/Slide";
+    import type BodyTemplate from "../../classes/templates/BodyTemplate";
 
-    export let slide: Slide;
-    export let type: "vertical" | "normal" = "normal";
+    /**
+     * @param {BodyTemplate} template - The template that will contain the code editor
+     */
+    export let template: BodyTemplate;
 
     let editorParent: HTMLDivElement;
 
+    /**
+     * When the code changes, update the template
+     */
     onMount(() => {
         editorParent.addEventListener("changedcode", (e: any) => {
-            if (e.detail.content)
-                slide.code = e.detail.content;
+            if (e.detail.content) {
+                template.code = e.detail.content;
+            }
         });
     });
 </script>
 
 <div bind:this={editorParent} style="width: 100%; height: 100%;">
-{#if slide.language == "python"}
-    <python-editor
-        contenteditable="true"
-        theme="dark"
-        type={type}
-        code=""
-        style="height: 100%; width: 100%;"
-    />
-{:else if slide.language == "javascript"}
-    <javascript-editor
-        contenteditable="true"
-        theme="dark"
-        type={type}
-        code=""
-        style="height: 100%; width: 100%;"
-    />
-{:else if slide.language == "typescript"}
-    <typescript-editor
-        contenteditable="true"
-        theme="dark"
-        type={type}
-        code=""
-        style="height: 100%; width: 100%;"
-    />
-{:else if slide.language == "java"}
-    <java-editor
-        contenteditable="true"
-        theme="dark"
-        type={type}
-        code=""
-        style="height: 100%; width: 100%;"
-    />
-{:else if slide.language == "sql"}
-    <sql-editor
-        contenteditable="true"
-        theme="dark"
-        type={type}
-        code=""
-        style="height: 100%; width: 100%;"
-    />
-{/if}
+    {#if template.language == "python"}
+        <python-editor
+            contenteditable="true"
+            theme="dark"
+            type="normal"
+            code={template.code}
+            style="height: 100%; width: 100%;"
+        />
+    {:else if template.language == "javascript"}
+        <javascript-editor
+            contenteditable="true"
+            theme="dark"
+            type="normal"
+            code={template.code}
+            style="height: 100%; width: 100%;"
+        />
+    {:else if template.language == "typescript"}
+        <typescript-editor
+            contenteditable="true"
+            theme="dark"
+            type="normal"
+            code={template.code}
+            style="height: 100%; width: 100%;"
+        />
+    {:else if template.language == "java"}
+        <java-editor
+            contenteditable="true"
+            theme="dark"
+            type="normal"
+            code={template.code}
+            style="height: 100%; width: 100%;"
+        />
+    {:else if template.language == "sql"}
+        <sql-editor
+            contenteditable="true"
+            theme="dark"
+            type="normal"
+            code={template.code}
+            style="height: 100%; width: 100%;"
+        />
+    {/if}
 </div>
