@@ -6,7 +6,6 @@
     import { saveAs } from "file-saver";
 
     import {
-        slidesHTML,
         currentLanguage,
         revealSlides,
         currentSlideH,
@@ -15,7 +14,16 @@
         deckName,
     } from "../../stores";
     import Exporting from "../modals/Exporting.svelte";
+    import arrowSVG from "../../assets/Arrow.svg?url";
     import { Slide } from "../../classes/Slide";
+    import JSZip from "jszip";
+    import revealCSS from "../../styles/reveal.css?inline";
+    import revealJS from "reveal.js/dist/reveal?raw";
+	import bloodCSS from "../../styles/blood.css?inline";
+	import customCSS from "../../styles/custom-styles.css?inline";
+	import bundle from 'icp-bundle/dist/base/full-offline.iife.js?raw';
+    import utilsZip from '../../assets/utils.zip?url';
+    import Exporter from "../../classes/Exporter";
 
     let currentDeckName = "untitled";
 
@@ -33,41 +41,64 @@
         }, 100);
     }
 
-    async function saveSlidesRedbean() {
-        // Start the dialog showing the user that the file is being generated
+    /**
+     * Save the slides as a redbean single-file distributable web server
+     */
+    function saveSlidesRedbean() {
         savingFileDialog = true;
-
-        // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-        $slidesHTML = $revealSlides
-            .map(
-                (slides) =>
-                    "<section>" +
-                    slides
-                        .map((slide) => `<section>${slide.getHtml()}</section>`)
-                        .join("\n") +
-                    "</section>"
-            )
-            .join("\n");
-
-        // Create a new web worker and ask it to generate the file
-        // We need a worker because the file generation is a blocking operation
-        const worker = new Worker(
-            new URL("../slidesExport.js", import.meta.url),
-            {
-                type: "module",
-            }
-        );
-        worker.postMessage({ slides: $slidesHTML });
-
-        // Wait for a response from the worker
-        worker.onmessage = (event) => {
+        Exporter.generateRedbean($revealSlides, (event) => {
             // Save the generated file
             const blob = new Blob([event.data.generated.buffer], {
                 type: "application/zip",
             });
             savingFileDialog = false;
             saveAs(blob, `${$deckName}.com`);
-        };
+        });
+    }
+
+    /**
+     * Save the slides as an HTML file that only works with an internet connection
+     * Useful because its size is much smaller than the redbean version
+     */
+    function saveSlidesOnline() {
+        // TODO: Implement this
+    }
+
+    /**
+     * Save the slides as a HTML file
+     */
+    function exportHTML(): void {
+        // Generate the HTML file
+        const blob = Exporter.generateHTML($revealSlides);
+
+        // Save it
+        saveAs(blob, `${$deckName}.html`);
+    }
+
+    async function downloadRequirements() {
+        // Get the utils.zip file
+        const utils = await fetch(utilsZip);
+        const zip = await JSZip.loadAsync(utils.arrayBuffer());
+
+        // Add revealjs main script
+        zip.file("reveal.js", revealJS);
+
+        // Add revealjs css
+        zip.file("reveal.css", revealCSS);
+
+        // Add revealjs theme
+        zip.file("blood.css", bloodCSS);
+
+        // Add custom styles
+        zip.file("custom-style.css", customCSS);
+
+        // Add ICP bundle
+        zip.file("full-offline.iife.js", bundle);
+
+        // Generate the zip file and make the user download it
+        zip.generateAsync({ type: "blob" }).then((content) => {
+            saveAs(content, "icp-requirements.zip");
+        });
     }
 
     /**
@@ -100,17 +131,41 @@
 <nav class="flex flex-row items-center h-[30px] bg-[#1a1a1d]">
     <div class="flex flex-row items-center ml-2">
         <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group"
+            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group/main"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">File</p>
                 <div
-                    class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:flex"
+                    class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden w-[170px] flex flex-col z-50 group-hover/main:flex"
                 >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
                         on:click={reset}>New</button
                     >
+                    <div class="group/exportserver flex">
+                        <button class="p-1 text-sm w-full text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9] flex flex-row justify-between items-center">
+                            <p class="text-sm">Export for Server</p>
+                            <img
+                                class="mr-2 rotate-[270deg]"
+                                src={arrowSVG}
+                                alt="arrow"
+                                width="10"
+                                height="10"
+                            />
+                        </button>
+                        <div class="w-0 overflow-hidden w-full text-sm text-black float-none text-left flex no-underline hover:bg-[#434552] hover:text-[#f9f9f9]">
+                            <div class="dropdown-content hidden translateX absolute left-0 m-0 bg-[#f9f9f9] w-[170px] flex flex-col z-50 group-hover/exportserver:flex">
+                                <button
+                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                                    on:click={exportHTML}>Export HTML</button
+                                > 
+                                <button
+                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                                    on:click={downloadRequirements}>Download Requirements</button
+                                > 
+                            </div>
+                        </div>
+                    </div>
                     <!-- <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
                         >Open</button
@@ -121,7 +176,7 @@
                     >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={() => {}}>Export HTML</button
+                        on:click={saveSlidesOnline}>Export Online</button
                     >
                 </div>
             </div>
@@ -227,5 +282,9 @@
         grid-template-columns: repeat(2, 1fr);
         grid-column-gap: 0.6em;
         grid-row-gap: 0.6em;
+    }
+
+    .translateX {
+        transform: translateX(100%);
     }
 </style>
