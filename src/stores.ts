@@ -41,3 +41,8 @@ export const deckName: Writable<string> = writable("untitled");
  * Whether the overview mode is active or not
  */
 export const showOverview: Writable<boolean> = writable(false);
+
+/**
+ * Whether the help modal is active or not
+ */
+ export const showHelp: Writable<boolean> = writable(false);

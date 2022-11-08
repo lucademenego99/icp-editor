@@ -8,12 +8,14 @@
 
 	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
     import Overview from "./lib/modals/Overview.svelte";
+    import Help from "./lib/modals/Help.svelte";
 </script>
 
 <main class="flex flex-col w-full h-full bg-[#1a1a1d] text-white">
 	<Navbar />
 	<Editor />
 	<Overview />
+	<Help />
 </main>
 
 <svelte:head>

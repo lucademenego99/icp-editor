@@ -1,4 +1,6 @@
 import type { Slide } from "./Slide";
+import customStyleCSS from "../styles/custom-styles.css?inline";
+import bundle from 'icp-bundle/dist/base/full.iife.js?raw';
 
 export default class Exporter {
   private static mapSlidesToHTML(slides: Slide[][]) {
@@ -31,7 +33,7 @@ export default class Exporter {
     worker.onmessage = onWorkerMessage;
   }
 
-  static generateHTML(revealSlides: Slide[][]): Blob {
+  static generateHTML(revealSlides: Slide[][], online: boolean): Blob {
     // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
     const slidesHTML = this.mapSlidesToHTML(revealSlides);
 
@@ -39,8 +41,8 @@ export default class Exporter {
     const html = `
       <!DOCTYPE html>
       <html lang="en">
-          ${this.getHtmlHeader()}
-          ${this.getHtmlBody(slidesHTML)}
+          ${this.getHtmlHeader(online)}
+          ${this.getHtmlBody(slidesHTML, online)}
       </html>`;
     
       // Create the blob file
@@ -52,7 +54,7 @@ export default class Exporter {
   }
 
 
-  private static getHtmlHeader = () => `
+  private static getHtmlHeader = (online: boolean) => `
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -60,13 +62,15 @@ export default class Exporter {
         <title>Interactive Code Playgrounds</title>
 
         <!-- Main Reveal Stylesheet -->
-        <link rel="stylesheet" href="reveal.css">
+        <link rel="stylesheet" href="${online ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.css' : 'reveal.css'}">
 
         <!-- Blood Reveal Theme Stylesheet -->
-        <link rel="stylesheet" href="blood.css" id="theme">
+        <link rel="stylesheet" href="${online ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/blood.css' : 'blood.css'}" id="theme">
 
         <!-- Custom stylesheet to make reveal work with our playgrounds -->
-        <link rel="stylesheet" href="custom-style.css">
+        <style>
+            ${customStyleCSS}
+        </style>
 
         <!-- If the user asks for the pdf version, set section height to auto -->
         <!-- Otherwise reveal.js breaks if the section height is set to 100% -->
@@ -81,10 +85,10 @@ export default class Exporter {
         </script>
 
         <!-- Bundle containing the code playground web components -->
-        <script src="full-offline.iife.js"></script>
+        ${online ? `<script>${bundle}</script>` : `<script src="full-offline.iife.js"></script>`}
     </head>`;
 
-    private static getHtmlBody = (slidesHtml) => `
+    private static getHtmlBody = (slidesHtml: string, online: boolean) => `
         <body class="h-screen full-page-demo reveal-viewport" data-page="icp" style="transition: transform 0.8s ease 0s;">
             <div class="reveal slide focused has-horizontal-slides ready" role="application" data-transition-speed="default"
                 data-background-transition="fade">
@@ -94,7 +98,7 @@ export default class Exporter {
             </div>
 
             <!-- Import the main reveal script -->
-            <script src="reveal.js"></script>
+            <script src="${online ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.js' : 'reveal.js'}"></script>
 
             <!-- Initialize reveal -->
             <script>

@@ -12,6 +12,7 @@
         currentSlideV,
         RevealInstance,
         deckName,
+        showHelp,
     } from "../../stores";
     import Exporting from "../modals/Exporting.svelte";
     import arrowSVG from "../../assets/Arrow.svg?url";
@@ -57,19 +58,12 @@
     }
 
     /**
-     * Save the slides as an HTML file that only works with an internet connection
-     * Useful because its size is much smaller than the redbean version
+     * Save the slides as an HTML file
+     * @param {boolean} online - Whether the HTML file should be able to work without an internet connection
      */
-    function saveSlidesOnline() {
-        // TODO: Implement this
-    }
-
-    /**
-     * Save the slides as a HTML file
-     */
-    function exportHTML(): void {
+    function exportHTML(online: boolean): void {
         // Generate the HTML file
-        const blob = Exporter.generateHTML($revealSlides);
+        const blob = Exporter.generateHTML($revealSlides, online);
 
         // Save it
         saveAs(blob, `${$deckName}.html`);
@@ -138,13 +132,21 @@
                 <div
                     class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden w-[170px] flex flex-col z-50 group-hover/main:flex"
                 >
+                    <!-- <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        >Open</button
+                    > -->
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={reset}>New</button
+                        on:click={() => exportHTML(true)}>Export for <strong>online</strong> use</button
+                    >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        on:click={saveSlidesRedbean}>Export for <strong>offline</strong> use</button
                     >
                     <div class="group/exportserver flex">
                         <button class="p-1 text-sm w-full text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9] flex flex-row justify-between items-center">
-                            <p class="text-sm">Export for Server</p>
+                            <p class="text-sm">Export for <strong>server</strong></p>
                             <img
                                 class="mr-2 rotate-[270deg]"
                                 src={arrowSVG}
@@ -157,7 +159,7 @@
                             <div class="dropdown-content hidden translateX absolute left-0 m-0 bg-[#f9f9f9] w-[170px] flex flex-col z-50 group-hover/exportserver:flex">
                                 <button
                                     class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                                    on:click={exportHTML}>Export HTML</button
+                                    on:click={() => exportHTML(false)}>Export current slides</button
                                 > 
                                 <button
                                     class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
@@ -166,23 +168,16 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        >Open</button
-                    > -->
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={saveSlidesRedbean}>Export Redbean</button
-                    >
-                    <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
-                        on:click={saveSlidesOnline}>Export Online</button
+                        on:click={reset}>Reset slides</button
                     >
                 </div>
             </div>
         </div>
         <div
             class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item"
+            on:click={() => showHelp.set(true)}
         >
             <p class="py-1 px-2 text-sm">Help</p>
         </div>
