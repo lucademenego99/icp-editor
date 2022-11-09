@@ -1,8 +1,8 @@
 <script lang="ts">
     import { Types } from "../../types";
-    import textSVG from "../../assets/Text.svg?url";
-    import codeSVG from "../../assets/Code.svg?url";
-    import imageSVG from "../../assets/Image.svg?url";
+    import Text from "../icons/Text.svelte";
+    import Code from "../icons/Code.svelte";
+    import Image from "../icons/Image.svelte";
     import ImageAlt from "../modals/ImageAlt.svelte";
 
     export let onSelect: (
@@ -45,32 +45,19 @@
             class="flex-1 text-center cursor-pointer hover group"
             on:click={() => onSelect(Types.TEXT, "", "")}
         >
-            <img
-                class="group-hover:bg-[#424242]"
-                src={textSVG}
-                alt="Add text on the slide"
-            />
+            <Text customClass="group-hover:bg-secondary" />
         </div>
         <div
             class="flex-1 text-center cursor-pointer hover group"
             on:click={() => onSelect(Types.CODE, "", "")}
         >
-            <img
-                class="group-hover:bg-[#424242]"
-                src={codeSVG}
-                alt="Add code on the slide"
-            />
+            <Code customClass="group-hover:bg-secondary" />
         </div>
         <div
             class="flex-1 text-center cursor-pointer hover group"
             on:click={inputImage}
         >
-            <!-- svelte-ignore a11y-img-redundant-alt -->
-            <img
-                class="group-hover:bg-[#424242]"
-                src={imageSVG}
-                alt="Add an image on the slide"
-            />
+            <Image customClass="group-hover:bg-secondary" />
         </div>
     </div>
 </div>

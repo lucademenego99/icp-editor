@@ -4,18 +4,32 @@
 
 	import revealCSS from "./styles/reveal.css?url";
 	import bloodCSS from "./styles/blood.css?url";
+	import whiteCSS from "./styles/white.css?url";
 	import customCSS from "./styles/custom-styles.css?url";
 
 	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
     import Overview from "./lib/modals/Overview.svelte";
-    import Help from "./lib/modals/Help.svelte";
+	import Help from "./lib/modals/Help.svelte";
+
+	import { darkTheme } from "./stores";
+
+	$: dark = $darkTheme
+
+	$: {
+		const themeElement = document.getElementById("theme");
+		if (themeElement) {
+			themeElement.setAttribute("href", $darkTheme ? bloodCSS : whiteCSS);
+		}
+	}
 </script>
 
-<main class="flex flex-col w-full h-full bg-[#1a1a1d] text-white">
-	<Navbar />
-	<Editor />
-	<Overview />
-	<Help />
+<main class="w-full h-full transition-colors duration-300" class:dark>
+	<div class="flex flex-col w-full h-full bg-primary  text-white">
+		<Navbar />
+		<Editor />
+		<Overview />
+		<Help />
+	</div>
 </main>
 
 <svelte:head>
@@ -23,7 +37,7 @@
 	<link rel="stylesheet" href="{revealCSS}">
 
 	<!-- Reveal Custom Theme -->
-	<link rel="stylesheet" href="{bloodCSS}">
+	<link rel="stylesheet" href="{bloodCSS}" id="theme">
 
 	<!-- ICP bundle loaded from node_modules -->
 	<script src="{bundle}"></script>
@@ -50,10 +64,8 @@
 			border: none;
 			outline: none;
 			display: block;
-			color: white;
 			font-family: courier, monospace;
-			background: #424242;
-			border: 1px solid #999;
+			border: 1px solid #b1b3bd;
 		}
 
 		::-webkit-scrollbar-track {

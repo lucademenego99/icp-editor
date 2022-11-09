@@ -15,9 +15,17 @@ export default class Exporter {
   .join("\n");
   }
 
-  static generateRedbean(revealSlides: Slide[][], onWorkerMessage: (event: MessageEvent) => void): void {
+  static generateRedbean(revealSlides: Slide[][], darkTheme: boolean, onWorkerMessage: (event: MessageEvent) => void): void {
     // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
     const slidesHTML = this.mapSlidesToHTML(revealSlides);
+
+    // Generate the HTML file
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+          ${this.getHtmlHeader(false, darkTheme)}
+          ${this.getHtmlBody(slidesHTML, false, darkTheme)}
+      </html>`;
 
     // Create a new web worker and ask it to generate the file
     // We need a worker because the file generation is a blocking operation
@@ -27,13 +35,13 @@ export default class Exporter {
             type: "module",
         }
     );
-    worker.postMessage({ slides: slidesHTML });
+    worker.postMessage({ slides: html });
 
     // Wait for a response from the worker
     worker.onmessage = onWorkerMessage;
   }
 
-  static generateHTML(revealSlides: Slide[][], online: boolean): Blob {
+  static generateHTML(revealSlides: Slide[][], online: boolean, darkTheme: boolean): Blob {
     // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
     const slidesHTML = this.mapSlidesToHTML(revealSlides);
 
@@ -41,8 +49,8 @@ export default class Exporter {
     const html = `
       <!DOCTYPE html>
       <html lang="en">
-          ${this.getHtmlHeader(online)}
-          ${this.getHtmlBody(slidesHTML, online)}
+          ${this.getHtmlHeader(online, darkTheme)}
+          ${this.getHtmlBody(slidesHTML, online, darkTheme)}
       </html>`;
     
       // Create the blob file
@@ -54,7 +62,7 @@ export default class Exporter {
   }
 
 
-  private static getHtmlHeader = (online: boolean) => `
+  private static getHtmlHeader = (online: boolean, darkTheme: boolean) => `
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -65,7 +73,7 @@ export default class Exporter {
         <link rel="stylesheet" href="${online ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.css' : 'reveal.css'}">
 
         <!-- Blood Reveal Theme Stylesheet -->
-        <link rel="stylesheet" href="${online ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/blood.css' : 'blood.css'}" id="theme">
+        <link rel="stylesheet" href="${online ? (darkTheme ? 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/blood.css' : 'https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/white.css') : (darkTheme ? 'blood.css' : 'white.css')}" id="theme">
 
         <!-- Custom stylesheet to make reveal work with our playgrounds -->
         <style>
@@ -88,7 +96,7 @@ export default class Exporter {
         ${online ? `<script>${bundle}</script>` : `<script src="full-offline.iife.js"></script>`}
     </head>`;
 
-    private static getHtmlBody = (slidesHtml: string, online: boolean) => `
+    private static getHtmlBody = (slidesHtml: string, online: boolean, darkTheme: boolean) => `
         <body class="h-screen full-page-demo reveal-viewport" data-page="icp" style="transition: transform 0.8s ease 0s;">
             <div class="reveal slide focused has-horizontal-slides ready" role="application" data-transition-speed="default"
                 data-background-transition="fade">
@@ -128,7 +136,7 @@ export default class Exporter {
                     // Transition style for full page slide backgrounds
                     backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
                     // Select a theme
-                    theme: 'blood',
+                    theme: '${darkTheme ? "blood" : "white"}',
                     // Select the type of slides transition
                     transition: 'slide',
                     // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly

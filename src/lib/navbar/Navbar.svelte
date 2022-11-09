@@ -13,9 +13,10 @@
         RevealInstance,
         deckName,
         showHelp,
+        darkTheme
     } from "../../stores";
     import Exporting from "../modals/Exporting.svelte";
-    import arrowSVG from "../../assets/Arrow.svg?url";
+    import Arrow from "../icons/Arrow.svelte";
     import { Slide } from "../../classes/Slide";
     import JSZip from "jszip";
     import revealCSS from "../../styles/reveal.css?inline";
@@ -25,6 +26,7 @@
 	import bundle from 'icp-bundle/dist/base/full-offline.iife.js?raw';
     import utilsZip from '../../assets/utils.zip?url';
     import Exporter from "../../classes/Exporter";
+    import Theme from "../icons/Theme.svelte";
 
     let currentDeckName = "untitled";
 
@@ -47,7 +49,7 @@
      */
     function saveSlidesRedbean() {
         savingFileDialog = true;
-        Exporter.generateRedbean($revealSlides, (event) => {
+        Exporter.generateRedbean($revealSlides, $darkTheme, (event) => {
             // Save the generated file
             const blob = new Blob([event.data.generated.buffer], {
                 type: "application/zip",
@@ -63,7 +65,7 @@
      */
     function exportHTML(online: boolean): void {
         // Generate the HTML file
-        const blob = Exporter.generateHTML($revealSlides, online);
+        const blob = Exporter.generateHTML($revealSlides, online, $darkTheme);
 
         // Save it
         saveAs(blob, `${$deckName}.html`);
@@ -122,68 +124,62 @@
 </script>
 
 <Exporting show={savingFileDialog} />
-<nav class="flex flex-row items-center h-[30px] bg-[#1a1a1d]">
+<nav class="flex flex-row items-center justify-between h-[30px] bg-primary text-black dark:text-white">
     <div class="flex flex-row items-center ml-2">
         <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group/main"
+            class="cursor-pointer text-left transition-all block hover:bg-secondary action-item group/main"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">File</p>
                 <div
-                    class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden w-[170px] flex flex-col z-50 group-hover/main:flex"
+                    class="dropdown-content absolute m-0 bg-primary-light hidden w-[170px] flex flex-col z-50 group-hover/main:flex"
                 >
                     <!-- <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         >Open</button
                     > -->
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={() => exportHTML(true)}>Export for <strong>online</strong> use</button
                     >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={saveSlidesRedbean}>Export for <strong>offline</strong> use</button
                     >
                     <div class="group/exportserver flex">
-                        <button class="p-1 text-sm w-full text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9] flex flex-row justify-between items-center">
+                        <button class="p-1 text-sm w-full text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9] flex flex-row justify-between items-center">
                             <p class="text-sm">Export for <strong>server</strong></p>
-                            <img
-                                class="mr-2 rotate-[270deg]"
-                                src={arrowSVG}
-                                alt="arrow"
-                                width="10"
-                                height="10"
-                            />
+                            <Arrow width={10} height={10} customClass="rotate-[270deg]" />
                         </button>
-                        <div class="w-0 overflow-hidden w-full text-sm text-black float-none text-left flex no-underline hover:bg-[#434552] hover:text-[#f9f9f9]">
-                            <div class="dropdown-content hidden translateX absolute left-0 m-0 bg-[#f9f9f9] w-[170px] flex flex-col z-50 group-hover/exportserver:flex">
+                        <div class="w-0 overflow-hidden w-full text-sm text-black float-none text-left flex no-underline hover:bg-secondary hover:text-[#f9f9f9]">
+                            <div class="dropdown-content hidden translateX absolute left-0 m-0 bg-primary-light w-[170px] flex flex-col z-50 group-hover/exportserver:flex">
                                 <button
-                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                                     on:click={() => exportHTML(false)}>Export current slides</button
                                 > 
                                 <button
-                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                                     on:click={downloadRequirements}>Download Requirements</button
                                 > 
                             </div>
                         </div>
                     </div>
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={reset}>Reset slides</button
                     >
                 </div>
             </div>
         </div>
         <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item"
+            class="cursor-pointer text-left transition-all block hover:bg-secondary action-item"
             on:click={() => showHelp.set(true)}
         >
             <p class="py-1 px-2 text-sm">Help</p>
         </div>
-        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
+        <div class="ml-6 h-[10px] border-r-[1px] border-black dark:border-white" />
         <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
+            class="cursor-pointer text-left transition-all block hover:bg-secondary action-item group ml-6"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">
@@ -192,7 +188,7 @@
                     ]}
                 </p>
                 <div
-                    class="transform-modal-body dropdown-content absolute m-0 p-1 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:grid"
+                    class="transform-modal-body dropdown-content absolute m-0 p-1 bg-primary-light hidden flex flex-col z-50 group-hover:grid"
                 >
                     <LayoutMain
                         on:click={() => setLayout(Layouts.MAIN)}
@@ -212,9 +208,9 @@
                 </div>
             </div>
         </div>
-        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
+        <div class="ml-6 h-[10px] border-r-[1px] border-black dark:border-white" />
         <div
-            class="cursor-pointer text-left transition-all block hover:bg-[#434552] action-item group ml-6"
+            class="cursor-pointer text-left transition-all block hover:bg-secondary action-item group ml-6"
         >
             <div class="overflow-hidden">
                 <p class="py-1 px-2 text-sm">
@@ -223,32 +219,32 @@
                         $currentLanguage.slice(1)}
                 </p>
                 <div
-                    class="dropdown-content absolute m-0 bg-[#f9f9f9] hidden flex flex-col z-50 group-hover:flex"
+                    class="dropdown-content absolute m-0 bg-primary-light hidden flex flex-col z-50 group-hover:flex"
                 >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Python</button
                     >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Typescript</button
                     >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Javascript</button
                     >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Java</button
                     >
                     <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-[#434552] hover:text-[#f9f9f9]"
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Sql</button
                     >
                 </div>
             </div>
         </div>
-        <div class="ml-6 h-[10px] border-r-[1px] border-white" />
+        <div class="ml-6 h-[10px] border-r-[1px] border-black dark:border-white" />
         <div class="flex flex-row ml-6">
             <p class="py-1 px-2 text-sm"><strong>Slide Deck name</strong> -</p>
             <p
@@ -259,6 +255,9 @@
                 {$deckName}
             </p>
         </div>
+    </div>
+    <div class="btn-shadow absolute top-3 right-3" on:click={() => {$darkTheme = !$darkTheme}}>
+        <Theme />
     </div>
     <!-- <Login /> -->
 </nav>

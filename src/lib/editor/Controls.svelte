@@ -7,6 +7,7 @@
         currentSlideH,
         currentLanguage,
         showOverview,
+        darkTheme,
     } from "../../stores";
     import { Slide } from "../../classes/Slide";
 
@@ -50,14 +51,6 @@
 </script>
 
 <aside
-    class="float-right w-[15%] h-full box-border p-3 border-r-4 border-[#1a1a1d] flex flex-col items-center justify-center gap-5 overflow-y-auto"
+    class="float-right w-[15%] h-full box-border p-3 flex flex-col items-center justify-center gap-5 overflow-y-auto text-black dark:text-white"
 >
-    <button on:click={newSlide}>New Slide</button>
-    <button on:click={newVerticalSlide}>New vertical Slide</button>
-    <button
-        on:click={() => {
-            revealSlides.set([...$revealSlides]);
-            showOverview.set(true);
-        }}>Slides overview</button
-    >
 </aside>

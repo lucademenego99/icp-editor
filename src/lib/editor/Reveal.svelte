@@ -7,15 +7,20 @@
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
 
-    import TrashSVG from "../../assets/Trash.svg?url";
+    import Trash from "../icons/Trash.svelte";
 
     import {
         RevealInstance,
         revealSlides,
         currentSlideH,
         currentSlideV,
+        currentLanguage,
+        showOverview,
+        darkTheme
     } from "../../stores";
     import { Layouts } from "../../types";
+    import Close from "../icons/Close.svelte";
+    import { Slide } from "../../classes/Slide";
 
     function removeCurrentSlide(event) {
         // Prevent the event from bubbling up to the parent element
@@ -76,7 +81,7 @@
             // Transition style for full page slide backgrounds
             backgroundTransition: "fade", // none/fade/slide/convex/concave/zoom
             // Select a theme
-            theme: "blood",
+            theme: $darkTheme ? "blood" : "white",
             // Select the type of slides transition
             transition: "slide",
             embedded: false,
@@ -92,8 +97,56 @@
             $RevealInstance = Reveal;
         });
     });
+
+    const newSlide = () => {
+        $revealSlides = [
+            ...$revealSlides,
+            [
+                new Slide(
+                    $revealSlides.length,
+                    0,
+                    $currentLanguage,
+                    Layouts.BODY
+                ),
+            ],
+        ];
+        $RevealInstance.sync();
+        setTimeout(() => {
+            $RevealInstance.slide($revealSlides.length - 1, 0);
+        }, 50);
+    };
+
+    const newVerticalSlide = () => {
+        const newSlides = [...$revealSlides];
+        newSlides[$currentSlideH].push(
+            new Slide(
+                $currentSlideH,
+                newSlides[$currentSlideH].length,
+                $currentLanguage,
+                Layouts.BODY
+            )
+        );
+        $revealSlides = newSlides;
+        $RevealInstance.sync();
+        setTimeout(() => {
+            $RevealInstance.slide(
+                $currentSlideH,
+                newSlides[$currentSlideH].length - 1
+            );
+        }, 50);
+    };
 </script>
 
+<div class="absolute top-[-2rem] right-[calc(50%-60px)] btn-shadow w-[120px] h-[50px] rounded-lg" on:click={() => {revealSlides.set([...$revealSlides]);
+    showOverview.set(true);}}>
+    Overview
+</div>
+<div class="absolute right-[-2rem] top-[calc(50%-25px)] btn-shadow w-[50px] h-[50px]" on:click={newSlide}>
+    <Close customClass="rotate-45" color="#dfdfdf" />
+</div>
+<div class="absolute bottom-[-2rem] right-[calc(50%-25px)] rounded-full bg-primary btn-shadow w-[50px] h-[50px] z-50" on:click={newVerticalSlide}>
+    <Close customClass="rotate-45" color="#dfdfdf" />
+</div>
 <div
     class="h-screen full-page-demo reveal-viewport"
     data-page="icp"
@@ -106,11 +159,7 @@
             : 'opacity-100'}"
         on:click={removeCurrentSlide}
     >
-        <img
-            class="cursor-pointer scale-75"
-            src={TrashSVG}
-            alt="Delete the current slide"
-        />
+        <Trash customClass="cursor-pointer scale-75" />
     </div>
     <div
         class="reveal slide focused has-horizontal-slides ready"

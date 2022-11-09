@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .text-primary {
+        @apply text-primary-light dark:text-primary-dark;
+    }
+
+    .bg-primary {
+        @apply bg-primary-light dark:bg-primary-dark;
+        @apply text-black dark:text-white;
+    }
+
+    .text-secondary {
+        @apply text-secondary-light dark:text-secondary-dark;
+    }
+
+    .bg-secondary {
+        @apply bg-secondary-light dark:bg-secondary-dark;
+    }
+
+    .btn-shadow {
+        @apply transition-all active:translate-y-1  active:[box-shadow:0_0px_0_0_#AA2233]
+        transition-all duration-150  border-[1px] [box-shadow:0_4px_0_0_#3b82f6] border-[#3b82f6] dark:[box-shadow:0_4px_0_0_#AA2233] dark:border-[#AA2233] z-40 flex justify-center items-center rounded-full w-[50px] h-[50px] cursor-pointer bg-[#1A1A1D] dark:bg-[#0c0c0c];
+    }
+
+    .text-emph {
+        @apply text-[#3b82f6] dark:text-[#AA2233] font-bold;
+    }
+}

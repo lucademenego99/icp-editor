@@ -8,7 +8,7 @@
     } from "../../stores";
     import interact from "interactjs";
     import { onMount } from "svelte";
-    import closeSVG from "../../assets/Close.svg?url";
+    import Close from "../icons/Close.svelte";
     import { v4 as uuidv4 } from "uuid";
     import type { Slide } from "../../classes/Slide";
 
@@ -233,13 +233,13 @@
         : 'hidden'}"
 >
     <div
-        class="w-[95%] h-[95%] relative bg-[#1a1a1d] rounded-lg flex flex-col justify-evenly items-center"
+        class="w-[95%] h-[95%] relative bg-primary rounded-lg flex flex-col justify-evenly items-center"
     >
         <div
             class="transition-all absolute right-5 top-5 scale-110 cursor-pointer z-50 hover:scale-125"
             on:click={removeOverview}
         >
-            <img src={closeSVG} alt="Close modal" />
+            <Close />
         </div>
         <div class="w-full h-full overflow-auto flex mx-10" style="">
             <div
@@ -327,7 +327,7 @@
 
     section section {
         position: absolute !important;
-        border: 2px solid white;
+        border: 2px solid rgb(116, 116, 116);
         pointer-events: all !important;
         cursor: grab;
         z-index: 99;

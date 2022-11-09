@@ -3,6 +3,11 @@ import { Slide } from './classes/Slide';
 import { Layouts, type Language } from './types';
 
 /**
+ * Whether the theme should be set to dark or not
+ */
+export const darkTheme: Writable<boolean> = writable(true);
+
+/**
  * Current instance of the Reveal Plugin
  */
 export const RevealInstance: any = writable(null);
