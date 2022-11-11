@@ -45,9 +45,10 @@ export default class BasicTemplate {
      * Build an Interactive Code Playgrounds element
      * @param codeText code that must be put inside the element
      * @param language used language by the code editor
+     * @param darkTheme if the dark theme is enabled
      * @returns Container with the code editor
      */
-    buildCode(codeText: string, language: Language): HTMLDivElement {
+    buildCode(codeText: string, language: Language, darkTheme: boolean): HTMLDivElement {
         const container = document.createElement('div');
         container.style.width = "100%";
         container.style.height = "100%";
@@ -55,7 +56,7 @@ export default class BasicTemplate {
         const code = document.createElement(`${language}-editor`);
         code.setAttribute('contenteditable', 'true');
         code.setAttribute('code', codeText);
-        code.setAttribute("theme", "dark");
+        code.setAttribute("theme", darkTheme ? "dark" : "light");
         code.setAttribute('type', 'normal');
         code.style.height = "100%";
         code.style.width = "100%";

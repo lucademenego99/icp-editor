@@ -3,12 +3,12 @@ import customStyleCSS from "../styles/custom-styles.css?inline";
 import bundle from 'icp-bundle/dist/base/full.iife.js?raw';
 
 export default class Exporter {
-  private static mapSlidesToHTML(slides: Slide[][]) {
+  private static mapSlidesToHTML(slides: Slide[][], darkTheme: boolean) {
     return slides.map(
       (slides) =>
           "<section>" +
           slides
-              .map((slide) => `<section>${slide.getHtml()}</section>`)
+              .map((slide) => `<section>${slide.getHtml(darkTheme)}</section>`)
               .join("\n") +
           "</section>"
   )
@@ -17,7 +17,7 @@ export default class Exporter {
 
   static generateRedbean(revealSlides: Slide[][], darkTheme: boolean, onWorkerMessage: (event: MessageEvent) => void): void {
     // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-    const slidesHTML = this.mapSlidesToHTML(revealSlides);
+    const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
 
     // Generate the HTML file
     const html = `
@@ -43,7 +43,7 @@ export default class Exporter {
 
   static generateHTML(revealSlides: Slide[][], online: boolean, darkTheme: boolean): Blob {
     // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-    const slidesHTML = this.mapSlidesToHTML(revealSlides);
+    const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
 
     // Generate the HTML file
     const html = `

@@ -118,20 +118,22 @@ export class Slide {
 
     /**
      * Generate the HTML of the slide
+     * @param {boolean} darkTheme Whether the dark theme is enabled or not
      * @returns {HTMLElement} HTML of the slide
      * @description This is used to generate the HTML of the current slide
      * @see https://revealjs.com/
      */ 
-    getHtml() {
-        return this.template.generateHtml().innerHTML;
+    getHtml(darkTheme: boolean) {
+        return this.template.generateHtml(darkTheme).innerHTML;
     }
 
     /**
      * Get the overview of the slide
+     * @param {boolean} darkTheme Whether the dark theme is enabled or not
      * @returns {HTMLElement} overview of the slide
      * @description This is used to show a general overview of all slides where the user can move them
      */ 
-    getOverview() {
-        return this.template.getOverview().innerHTML;
+    getOverview(darkTheme: boolean) {
+        return this.template.getOverview(darkTheme).innerHTML;
     }
 }

@@ -22,6 +22,7 @@
     import revealCSS from "../../styles/reveal.css?inline";
     import revealJS from "reveal.js/dist/reveal?raw";
 	import bloodCSS from "../../styles/blood.css?inline";
+    import whiteCSS from "../../styles/white.css?inline";
 	import customCSS from "../../styles/custom-styles.css?inline";
 	import bundle from 'icp-bundle/dist/base/full-offline.iife.js?raw';
     import utilsZip from '../../assets/utils.zip?url';
@@ -82,8 +83,11 @@
         // Add revealjs css
         zip.file("reveal.css", revealCSS);
 
-        // Add revealjs theme
+        // Add revealjs dark theme
         zip.file("blood.css", bloodCSS);
+
+        // Add revealjs light theme
+        zip.file("white.css", whiteCSS);
 
         // Add custom styles
         zip.file("custom-style.css", customCSS);
