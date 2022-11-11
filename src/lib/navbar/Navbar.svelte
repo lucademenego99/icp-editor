@@ -121,10 +121,6 @@
 
         revealSlides.set($revealSlides);
     }
-
-    function setLayout(layout: Layouts): void {
-        $revealSlides[$currentSlideH][$currentSlideV].setLayout(layout);
-    }
 </script>
 
 <Exporting show={savingFileDialog} />
@@ -195,17 +191,14 @@
                     class="transform-modal-body dropdown-content absolute m-0 p-1 bg-primary-light hidden flex flex-col z-50 group-hover:grid"
                 >
                     <LayoutMain
-                        on:click={() => setLayout(Layouts.MAIN)}
                         isActive={$revealSlides[$currentSlideH][$currentSlideV]
                             .layout == Layouts.MAIN}
                     />
                     <LayoutBody
-                        on:click={() => setLayout(Layouts.BODY)}
                         isActive={$revealSlides[$currentSlideH][$currentSlideV]
                             .layout == Layouts.BODY}
                     />
                     <LayoutColumns
-                        on:click={() => setLayout(Layouts.COLUMNS)}
                         isActive={$revealSlides[$currentSlideH][$currentSlideV]
                             .layout == Layouts.COLUMNS}
                     />

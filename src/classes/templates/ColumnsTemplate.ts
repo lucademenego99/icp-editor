@@ -3,10 +3,15 @@ import BasicTemplate from "./BasicTemplate";
 import BodyTemplate from "./BodyTemplate";
 
 export default class ColumnsTemplate extends BasicTemplate {
-    constructor() {
+
+    /**
+     * Create a new ColumnsTemplate
+     * @param language programming language of the code editor
+     */
+    constructor(language: Language) {
         super();
-        this.column1 = new BodyTemplate();
-        this.column2 = new BodyTemplate();
+        this.column1 = new BodyTemplate(language);
+        this.column2 = new BodyTemplate(language);
     }
 
     /**
@@ -49,7 +54,7 @@ export default class ColumnsTemplate extends BasicTemplate {
      * @returns {HTMLElement} HTML of the template
      * @description This is used to generate the HTML of the current template
      */ 
-    generateHtml(): HTMLElement {
+    generateHtml(darkTheme: boolean): HTMLElement {
         const section = document.createElement('section');
         section.appendChild(this.buildTitle());
 
@@ -67,7 +72,7 @@ export default class ColumnsTemplate extends BasicTemplate {
         body1.style.height = "100%";
         switch (this.column1.bodyType) {
             case Types.CODE:
-                body1.appendChild(this.buildCode(this.column1.code, this.column1.language));
+                body1.appendChild(this.buildCode(this.column1.code, this.column1.language, darkTheme));
                 break;
             case Types.IMAGE:
                 body1.appendChild(this.buildImage(this.column1.encodedImage, this.column1.imageAlt));
@@ -85,7 +90,7 @@ export default class ColumnsTemplate extends BasicTemplate {
         body2.style.height = "100%";
         switch (this.column2.bodyType) {
             case Types.CODE:
-                body2.appendChild(this.buildCode(this.column2.code, this.column2.language));
+                body2.appendChild(this.buildCode(this.column2.code, this.column2.language, darkTheme));
                 break;
             case Types.IMAGE:
                 body2.appendChild(this.buildImage(this.column2.encodedImage, this.column2.imageAlt));
@@ -106,8 +111,8 @@ export default class ColumnsTemplate extends BasicTemplate {
      * @returns {HTMLElement} overview of the template
      * @description This is used to show a general overview of all slides where the user can move them
      */
-    getOverview(): HTMLElement {
-        const overviewHTML = this.generateHtml();
+    getOverview(darkTheme): HTMLElement {
+        const overviewHTML = this.generateHtml(darkTheme);
         // Set pointer events none to all children of section elements in overviewHTML
         this.disablePointerEventsOnAllChildren(overviewHTML);
         return overviewHTML;

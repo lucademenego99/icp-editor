@@ -54,13 +54,10 @@ export class Slide {
         this.layout = layout;
         switch (layout) {
             case Layouts.BODY:
-                this.template = new BodyTemplate();
-                this.template.language = language;
+                this.template = new BodyTemplate(language);
                 break;
             case Layouts.COLUMNS:
-                this.template = new ColumnsTemplate();
-                this.template.column1.language = language;
-                this.template.column2.language = language;
+                this.template = new ColumnsTemplate(language);
                 break;
             case Layouts.MAIN:
                 this.template = new MainTemplate();
@@ -71,29 +68,29 @@ export class Slide {
     /**
      * Set a new layout for the slide
      * @param {Layouts} layout New layout
+     * @param {Language} language Currently selected programming language
      * @description This is used to change the layout of the slide
      * @see Layouts
      */
-    setLayout(layout: Layouts) {
+    setLayout(layout: Layouts, language: Language) {
         // Get the language used in the current layout
-        let language: Language;
+        let usedLang: Language;
         if (this.template instanceof BodyTemplate) {
-            language = this.template.language;
+            usedLang = this.template.language;
         } else if (this.template instanceof ColumnsTemplate) {
-            language = this.template.column1.language;
+            usedLang = this.template.column1.language;
+        } else {
+            usedLang = language;
         }
 
         // Switch layout
         this.layout = layout;
         switch (layout) {
             case Layouts.BODY:
-                this.template = new BodyTemplate();
-                this.template.language = language;
+                this.template = new BodyTemplate(usedLang);
                 break;
             case Layouts.COLUMNS:
-                this.template = new ColumnsTemplate();
-                this.template.column1.language = language;
-                this.template.column2.language = language;
+                this.template = new ColumnsTemplate(usedLang);
                 break;
             case Layouts.MAIN:
                 this.template = new MainTemplate();

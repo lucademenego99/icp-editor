@@ -4,6 +4,7 @@
     import { Layouts } from "../../../types";
     import {
         revealSlides,
+        currentLanguage,
         currentSlideH,
         currentSlideV,
     } from "../../../stores";
@@ -11,7 +12,7 @@
 
 <div
     on:click={() => {
-        $revealSlides[$currentSlideH][$currentSlideV].setLayout(Layouts.MAIN);
+        $revealSlides[$currentSlideH][$currentSlideV].setLayout(Layouts.MAIN, $currentLanguage);
         revealSlides.update((a) => a);
     }}
     class="flex justify-center items-center relative cursor-pointer rounded-sm w-full pt-[56.25%] bg-white transition-all hover:bg-[#e8e8e8] box-border {isActive

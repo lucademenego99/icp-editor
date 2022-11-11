@@ -5,6 +5,7 @@
     import {
         revealSlides,
         currentSlideH,
+        currentLanguage,
         currentSlideV,
     } from "../../../stores";
 </script>
@@ -12,7 +13,8 @@
 <div
     on:click={() => {
         $revealSlides[$currentSlideH][$currentSlideV].setLayout(
-            Layouts.COLUMNS
+            Layouts.COLUMNS,
+            $currentLanguage
         );
         revealSlides.update((a) => a);
     }}

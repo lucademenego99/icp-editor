@@ -5,8 +5,14 @@ import BasicTemplate from "./BasicTemplate";
  * Template for the Body layout
  */
 export default class BodyTemplate extends BasicTemplate {
-    constructor() {
+
+    /**
+     * Create a new BodyTemplate
+     * @param language programming language of the code editor
+     */
+    constructor(language) {
         super();
+        this.language = language;
         this.code = '';
     }
 
