@@ -137,14 +137,14 @@
     };
 </script>
 
-<div class="absolute top-[-2rem] right-[calc(50%-60px)] btn-shadow w-[120px] h-[50px] rounded-lg" on:click={() => {revealSlides.set([...$revealSlides]);
+<div class="absolute top-[-25px] right-[calc(50%-60px)] btn-shadow w-[120px] h-[50px] rounded-lg" on:click={() => {revealSlides.set([...$revealSlides]);
     showOverview.set(true);}}>
     Overview
 </div>
-<div class="absolute right-[-2rem] top-[calc(50%-25px)] btn-shadow w-[50px] h-[50px]" on:click={newSlide}>
+<div class="absolute right-[-25px] top-[calc(50%-25px)] btn-shadow w-[50px] h-[50px]" on:click={newSlide}>
     <Close customClass="rotate-45" color="#dfdfdf" />
 </div>
-<div class="absolute bottom-[-2rem] right-[calc(50%-25px)] rounded-full bg-primary btn-shadow w-[50px] h-[50px] z-50" on:click={newVerticalSlide}>
+<div class="absolute bottom-[-25px] right-[calc(50%-25px)] rounded-full bg-primary btn-shadow w-[50px] h-[50px] z-50" on:click={newVerticalSlide}>
     <Close customClass="rotate-45" color="#dfdfdf" />
 </div>
 <div

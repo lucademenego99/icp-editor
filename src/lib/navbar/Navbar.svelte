@@ -260,7 +260,7 @@
             </p>
         </div>
     </div>
-    <div class="btn-shadow absolute top-3 right-3" on:click={() => {$darkTheme = !$darkTheme}}>
+    <div class="absolute top-3 right-3 btn-shadow" on:click={() => {$darkTheme = !$darkTheme}}>
         <Theme />
     </div>
     <!-- <Login /> -->

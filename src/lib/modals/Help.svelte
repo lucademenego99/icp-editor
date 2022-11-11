@@ -84,7 +84,7 @@
                                 ><span class="emph">image element</span></strong
                             > will give you a file selector where you can select
                             an image from your computer. You will be asked to provide
-                            an ALT text: you can image it as a description of the
+                            an ALT text: you can imagine it as a description of the
                             image, which will be shown if the image is not loaded.
                         </li>
                     </ul>
@@ -112,7 +112,7 @@
 
                     <p class="text-lg m-0 p-0 mx-1 my-2">
                         If you need to move the slides, you can easily do it in
-                        the <strong><span class="emph">overview mode</span></strong>. You can easily activate it by
+                        the <strong><span class="emph">overview mode</span></strong>. You can activate it by
                         clicking on the button <span class="btn-explanation"
                             >[Overview]</span
                         > on top of the slide.

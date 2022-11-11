@@ -5,6 +5,7 @@
         showOverview,
         currentSlideH,
         currentSlideV,
+        darkTheme,
     } from "../../stores";
     import interact from "interactjs";
     import { onMount } from "svelte";
@@ -239,7 +240,7 @@
             class="transition-all absolute right-5 top-5 scale-110 cursor-pointer z-50 hover:scale-125"
             on:click={removeOverview}
         >
-            <Close />
+            <Close color={$darkTheme ? 'white' : 'black'} />
         </div>
         <div class="w-full h-full overflow-auto flex mx-10" style="">
             <div
@@ -282,7 +283,7 @@
                                         style="transform: translate3d(0px, {indexV *
                                             (slideHeight + 50)}px, 0px);"
                                     >
-                                        {@html slide.getOverview()}
+                                        {@html slide.getOverview($darkTheme)}
                                     </section>
                                     <div
                                         data-h={indexH}

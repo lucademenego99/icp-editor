@@ -1,6 +1,5 @@
 <script lang="ts">
     import Reveal from "./Reveal.svelte";
-    import Controls from "./Controls.svelte";
 </script>
 
 <main class="w-full h-full flex justify-center">
