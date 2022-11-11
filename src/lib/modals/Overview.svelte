@@ -28,6 +28,11 @@
         }, 150);
     }
 
+    function enterSlide(h, v) {
+        moveToSlide(h, v);
+        showOverview.set(false);
+    }
+
     $: {
         if ($showOverview == false && $RevealInstance) {
             slides = $revealSlides;
@@ -280,6 +285,7 @@
                                         data-h={indexH}
                                         data-v={indexV}
                                         on:mousedown={startDrag}
+                                        on:click={() => {enterSlide(indexH, indexV)}}
                                         style="transform: translate3d(0px, {indexV *
                                             (slideHeight + 50)}px, 0px);"
                                     >
