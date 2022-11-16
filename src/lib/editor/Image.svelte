@@ -29,7 +29,7 @@
             on:click={() => {
                 showImageAltDialog = true;
             }}
-            class="transition-all font-semibold text-xl w-3/12 rounded-lg p-2 border-2 hover:bg-white hover:text-black"
+            class="transition-all text-white font-semibold text-xl w-3/12 rounded-lg p-2 border-2 hover:bg-white hover:text-black"
             >Change ALT</button
         >
         <button
