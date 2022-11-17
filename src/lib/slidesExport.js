@@ -1,3 +1,11 @@
+/*
+
+    Worker exporting the slides as a redbean single-file distributable web server
+
+    It exploits the icp-create-server package, and it loads the starting redbean file from icp-bundle
+
+*/
+
 import redbean from "icp-bundle/dist/base/redbean.com?url";
 import { generateRedbeanFile } from "icp-create-server";
 

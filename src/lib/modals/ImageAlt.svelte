@@ -1,6 +1,18 @@
 <script lang="ts">
+
+    /**
+     * @param {boolean} show - Whether the modal should be shown or not
+     */
     export let show: boolean = false;
+
+    /**
+     * @param {string} alt - Alt text of the image
+     */
     export let alt: string = "";
+
+    /**
+     * @param {(alt: string) => void} onConfirm - Function called when the user confirms the changes
+     */
     export let onConfirm: (alt: string) => void;
 </script>
 

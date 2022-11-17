@@ -1,9 +1,10 @@
 <script lang="ts">
     import Reveal from "./Reveal.svelte";
 
-    // Check if the width is greater than the height of the screen
+    /**
+     * Check if the screen is in landscape mode
+     */
     function isLandscape() {
-        console.log(window.innerWidth > window.innerHeight);
         return window.innerWidth > window.innerHeight;
     }
 </script>

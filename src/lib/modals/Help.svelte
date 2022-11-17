@@ -2,7 +2,10 @@
     import { showHelp } from "../../stores";
     import Close from "../icons/Close.svelte";
 
-    // Set showHelp to false on esc key
+    /**
+     * Close the help modal when the user presses the escape key and the modal is open
+     * @param event
+     */
     function handleKeyDown(event) {
         if (event.key == "Escape" && $showHelp) {
             showHelp.set(false);

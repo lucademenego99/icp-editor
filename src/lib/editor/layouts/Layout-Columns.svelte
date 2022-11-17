@@ -19,8 +19,25 @@
      */
     let QuillInstance;
 
-    let col1: HTMLDivElement, col2: HTMLDivElement;
-    let textBody1: HTMLElement, textBody2: HTMLElement;
+    /**
+     * Main content of this layout for the first column
+     */
+    let col1: HTMLDivElement;
+
+    /**
+     * Main content of this layout for the second column
+     */
+    let col2: HTMLDivElement;
+
+    /**
+     * Element that will contain the Quill editor for the first column
+     */
+    let textBody1: HTMLElement;
+
+    /**
+     * Element that will contain the Quill editor for the second column
+     */
+    let textBody2: HTMLElement;
 
     /**
      * On mount initialize the Quill library

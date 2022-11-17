@@ -29,14 +29,26 @@
     import Exporter from "../../classes/Exporter";
     import Theme from "../icons/Theme.svelte";
 
+    /**
+     * Initial deck name
+     */
     let currentDeckName = "untitled";
 
+    /**
+     * Boolean indicating whether the user is currently exporting the deck
+     */
     let savingFileDialog = false;
 
+    /**
+     * Update the deck name stored within the store when the user changes it
+     */
     $: {
         deckName.set(currentDeckName);
     }
 
+    /**
+     * Reset the state of the application
+     */
     function reset() {
         revealSlides.set([[new Slide(0, 0, "python", Layouts.MAIN)]]);
         $RevealInstance.slide(0, 0);
@@ -72,6 +84,10 @@
         saveAs(blob, `${$deckName}.html`);
     }
 
+    /**
+     * Allow the user to download a zip file containing all the requirements to make the slides work locally
+     * This is used when the user wants to export the slides for self-hosting
+     */
     async function downloadRequirements() {
         // Get the utils.zip file
         const utils = await fetch(utilsZip);
@@ -105,14 +121,14 @@
      * Change the current default language. Calling this function will:
      * - change the default programming language used when creating a new slide
      * - change the programming language used in the current slide
+     * 
+     * @param {MouseEvent} event event that triggered the function
      */
     function setCurrentLanguage(event: MouseEvent): void {
         // Get the selected language
         $currentLanguage = (
             event.target as HTMLLinkElement
         ).textContent.toLowerCase() as Language;
-
-        console.log("Setting language to " + $currentLanguage);
 
         // Change the programming language used in the current slide
         $revealSlides[$currentSlideH][$currentSlideV].setLanguage(
@@ -256,7 +272,6 @@
     <div class="absolute top-3 right-3 btn-shadow" on:click={() => {$darkTheme = !$darkTheme}}>
         <Theme />
     </div>
-    <!-- <Login /> -->
 </nav>
 
 <style>

@@ -2,6 +2,9 @@ import { Types, type Language } from "../../types";
 import BasicTemplate from "./BasicTemplate";
 import BodyTemplate from "./BodyTemplate";
 
+/**
+ * Template for the Columns layout
+ */
 export default class ColumnsTemplate extends BasicTemplate {
 
     /**

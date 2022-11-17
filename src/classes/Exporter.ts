@@ -2,67 +2,95 @@ import type { Slide } from "./Slide";
 import customStyleCSS from "../styles/custom-styles.css?inline";
 import bundle from 'icp-bundle/dist/base/full.iife.js?raw';
 
+/**
+ * Class exposing functions to export the slides
+ */
 export default class Exporter {
-  private static mapSlidesToHTML(slides: Slide[][], darkTheme: boolean) {
-    return slides.map(
-      (slides) =>
-          "<section>" +
-          slides
-              .map((slide) => `<section>${slide.getHtml(darkTheme)}</section>`)
-              .join("\n") +
-          "</section>"
-  )
-  .join("\n");
-  }
 
-  static generateRedbean(revealSlides: Slide[][], darkTheme: boolean, onWorkerMessage: (event: MessageEvent) => void): void {
-    // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-    const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
+    /**
+     * Create the HTML code from the slides
+     * @param slides array of slides
+     * @param darkTheme whether the dark theme is enabled
+     * @returns HTML code representing the slides
+     */
+    private static mapSlidesToHTML(slides: Slide[][], darkTheme: boolean) {
+        return slides.map(
+            (slides) =>
+                "<section>" +
+                slides
+                    .map((slide) => `<section>${slide.getHtml(darkTheme)}</section>`)
+                    .join("\n") +
+                "</section>"
+        )
+            .join("\n");
+    }
 
-    // Generate the HTML file
-    const html = `
-      <!DOCTYPE html>
-      <html lang="en">
-          ${this.getHtmlHeader(false, darkTheme)}
-          ${this.getHtmlBody(slidesHTML, false, darkTheme)}
-      </html>`;
+    /**
+     * Generate a redbean single-file distributable web-server from the slides
+     * @param revealSlides array of slides
+     * @param darkTheme whether the dark theme is enabled
+     * @param onWorkerMessage function to call when the worker sends a message
+     */
+    static generateRedbean(revealSlides: Slide[][], darkTheme: boolean, onWorkerMessage: (event: MessageEvent) => void): void {
+        // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
+        const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
 
-    // Create a new web worker and ask it to generate the file
-    // We need a worker because the file generation is a blocking operation
-    const worker = new Worker(
-        new URL("../lib/slidesExport.js", import.meta.url),
-        {
-            type: "module",
-        }
-    );
-    worker.postMessage({ slides: html });
+        // Generate the HTML file
+        const html = `
+            <!DOCTYPE html>
+            <html lang="en">
+                ${this.getHtmlHeader(false, darkTheme)}
+                ${this.getHtmlBody(slidesHTML, false, darkTheme)}
+            </html>`;
 
-    // Wait for a response from the worker
-    worker.onmessage = onWorkerMessage;
-  }
+        // Create a new web worker and ask it to generate the file
+        // We need a worker because the file generation is a blocking operation
+        const worker = new Worker(
+            new URL("../lib/slidesExport.js", import.meta.url),
+            {
+                type: "module",
+            }
+        );
+        worker.postMessage({ slides: html });
 
-  static generateHTML(revealSlides: Slide[][], online: boolean, darkTheme: boolean): Blob {
-    // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
-    const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
+        // Wait for a response from the worker
+        worker.onmessage = onWorkerMessage;
+    }
 
-    // Generate the HTML file
-    const html = `
-      <!DOCTYPE html>
-      <html lang="en">
-          ${this.getHtmlHeader(online, darkTheme)}
-          ${this.getHtmlBody(slidesHTML, online, darkTheme)}
-      </html>`;
-    
-      // Create the blob file
-      const blob = new Blob([html], {
-          type: "text/html",
-      });
+    /**
+     * Generate an HTML file from the slides
+     * @param revealSlides array of slides
+     * @param online whether the slides should require an internet connection
+     * @param darkTheme whether the dark theme is enabled
+     * @returns blob representing the HTML file
+     */
+    static generateHTML(revealSlides: Slide[][], online: boolean, darkTheme: boolean): Blob {
+        // For each element in revealSlides, get its innerHTML, put it inside a <section></section>tag, and add it to a newly created array
+        const slidesHTML = this.mapSlidesToHTML(revealSlides, darkTheme);
 
-      return blob;
-  }
+        // Generate the HTML file
+        const html = `
+            <!DOCTYPE html>
+            <html lang="en">
+                ${this.getHtmlHeader(online, darkTheme)}
+                ${this.getHtmlBody(slidesHTML, online, darkTheme)}
+            </html>`;
 
+        // Create the blob file
+        const blob = new Blob([html], {
+            type: "text/html",
+        });
 
-  private static getHtmlHeader = (online: boolean, darkTheme: boolean) => `
+        return blob;
+    }
+
+    /**
+     * Generate the HTML header
+     * @param online whether the slides should require an internet connection
+     * @param darkTheme whether the dark theme is enabled
+     * @returns HTML header
+     */
+    private static getHtmlHeader = (online: boolean, darkTheme: boolean) => `
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -96,6 +124,13 @@ export default class Exporter {
         ${online ? `<script>${bundle}</script>` : `<script src="full-offline.iife.js"></script>`}
     </head>`;
 
+    /**
+     * Generate the HTML body
+     * @param slidesHtml HTML code representing the slides
+     * @param online whether the slides should require an internet connection
+     * @param darkTheme whether the dark theme is enabled
+     * @returns HTML body
+     */
     private static getHtmlBody = (slidesHtml: string, online: boolean, darkTheme: boolean) => `
         <body class="h-screen full-page-demo reveal-viewport" data-page="icp" style="transition: transform 0.8s ease 0s;">
             <div class="reveal slide focused has-horizontal-slides ready" role="application" data-transition-speed="default"

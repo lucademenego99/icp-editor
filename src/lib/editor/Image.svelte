@@ -1,13 +1,28 @@
 <script lang="ts">
     import ImageAlt from "../modals/ImageAlt.svelte";
 
+    /**
+     * @param {() => void} removeImage - Function called when the image is removed
+     */
     export let removeImage: () => void;
+
+    /**
+     * @param {string} encodedImage - Image encoded in base64
+     */
     export let encodedImage: string;
+
+    /**
+     * @param {string} imageAlt - Alt text for the image
+     */
     export let imageAlt: string;
 
+    /**
+     * Whether the image ALT dialog should be shown or not
+     */
     let showImageAltDialog: boolean = false;
 </script>
 
+<!-- Modal for modifying the image ALT -->
 <ImageAlt
     show={showImageAltDialog}
     alt={imageAlt}

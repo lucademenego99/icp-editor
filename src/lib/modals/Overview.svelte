@@ -13,12 +13,31 @@
     import { v4 as uuidv4 } from "uuid";
     import type { Slide } from "../../classes/Slide";
 
+    /**
+     * Variable used to store the position of the elements being dragged
+     */
     const position = { x: 0, y: 0 };
 
+    /**
+     * List of slides for the overview
+     */
     let slides: Slide[][] = [[]];
+
+    /**
+     * Default slide height
+     */
     const slideHeight = 540;
+
+    /**
+     * Default slide width
+     */
     const slideWidth = 960;
 
+    /**
+     * Move the reveal instance to the given slide
+     * @param h - Horizontal index of the slide
+     * @param v - Vertical index of the slide
+     */
     function moveToSlide(h, v) {
         $RevealInstance.slide(h, v);
         currentSlideH.set(h);
@@ -28,27 +47,42 @@
         }, 150);
     }
 
+    /**
+     * Function called when the user clicks on a slide
+    */
     function enterSlide(h, v) {
         moveToSlide(h, v);
         showOverview.set(false);
     }
 
+    /**
+     * Continuously update the slides variable when the overview is not shown
+    */
     $: {
         if ($showOverview == false && $RevealInstance) {
             slides = $revealSlides;
         }
     }
 
+    /**
+     * Close the overview modal
+     */
     function removeOverview() {
         moveToSlide(0, 0);
         revealSlides.set([...slides]);
         showOverview.set(false);
     }
 
+    /**
+     * Function called to start the dragging of a slide performed by the user
+    */
     function startDrag(event) {
         event.target.classList.add("draggable");
     }
 
+    /**
+     * On mount initialize the drag and drop functionality, built on top of interact.js
+     */
     onMount(() => {
         interact(".draggable")
             .draggable({
@@ -144,19 +178,6 @@
                             place.getAttribute("data-v")
                         );
                         const direction = place.getAttribute("data-direction");
-                        console.log(
-                            "Moving slide {" +
-                                oldIndexH +
-                                "-" +
-                                oldIndexV +
-                                "} to {" +
-                                newIndexH +
-                                "-" +
-                                newIndexV +
-                                "}" +
-                                "  direction " +
-                                direction
-                        );
 
                         // Check if oldIndexH is not NaN
                         if (
@@ -224,7 +245,10 @@
             });
     });
 
-    // Set showOverview to false on esc key
+    /**
+     * Close the overview component when the user types the escape key and the overview is currently shown
+     * @param event event that triggered the function
+     */
     function handleKeyDown(event) {
         if (event.key == "Escape" && $showOverview) {
             removeOverview();

@@ -1,6 +1,6 @@
 <!-- Initialize reveal -->
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
     import Reveal from "reveal.js";
 
     import LayoutMain from "./layouts/Layout-Main.svelte";
@@ -22,6 +22,10 @@
     import Close from "../icons/Close.svelte";
     import { Slide } from "../../classes/Slide";
 
+    /**
+     * Delete the current slide from the set of slides
+     * @param event event triggering this function
+     */
     function removeCurrentSlide(event) {
         // Prevent the event from bubbling up to the parent element
         event.stopPropagation();
@@ -54,6 +58,9 @@
         }, 100);
     }
 
+    /**
+     * On mount initialize Revealjs
+     */
     onMount(() => {
         Reveal.initialize({
             // Display controls in the bottom right corner
@@ -88,16 +95,20 @@
             // IMPORTANT: disable the default layout (centering and scaling) to make the code editors work correctly
             disableLayout: true,
         }).then(() => {
+            // When the slide changes, update the indices in the store
             Reveal.addEventListener("slidechanged", (e) => {
-                console.log("Changed slide to ", e.indexh, e.indexv);
                 $currentSlideH = e.indexh;
                 $currentSlideV = e.indexv;
             });
 
+            // Save the Revealjs instance in the store
             $RevealInstance = Reveal;
         });
     });
 
+    /**
+     * Add a new slide to the presentation
+     */
     const newSlide = () => {
         $revealSlides = [
             ...$revealSlides,
@@ -116,6 +127,9 @@
         }, 50);
     };
 
+    /**
+     * Add a new vertical slide to the presentation
+     */
     const newVerticalSlide = () => {
         const newSlides = [...$revealSlides];
         newSlides[$currentSlideH].push(

@@ -8,6 +8,9 @@
      */
     export let template: BodyTemplate;
 
+    /**
+     * Parent element of the code editor
+     */
     let editorParent: HTMLDivElement;
 
     /**

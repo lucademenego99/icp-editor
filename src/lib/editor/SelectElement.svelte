@@ -5,16 +5,29 @@
     import Image from "../icons/Image.svelte";
     import ImageAlt from "../modals/ImageAlt.svelte";
 
+    /**
+     * @param {(Types, string, string) => void} onSelect - Function called when an element is selected
+     */
     export let onSelect: (
         value: Types,
         image: string,
         imageAlt: string
     ) => void;
 
+    /**
+     * Whether the image ALT dialog should be shown or not
+     */
     let showImageAltDialog = false;
 
+    /**
+     * Image encoded in base64
+     */
     let imageBase64: string;
 
+    /**
+     * Prepare a dialog for the user to select an image
+     * When the image is selected, a dialog is shown to let the user input the ALT text
+     */
     function inputImage() {
         const input = document.createElement("input");
         input.type = "file";

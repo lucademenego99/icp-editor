@@ -13,6 +13,9 @@
      */
     export let slide: Slide;
 
+    /**
+     * Main content of this layout
+     */
     let body: HTMLDivElement;
 
     /**

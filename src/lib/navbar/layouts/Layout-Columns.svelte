@@ -1,4 +1,7 @@
 <script lang="ts">
+    /**
+     * @param {boolean} isActive - Whether the layout is active or not
+     */
     export let isActive: boolean;
 
     import { Layouts } from "../../../types";

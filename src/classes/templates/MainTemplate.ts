@@ -1,5 +1,8 @@
 import BasicTemplate from "./BasicTemplate";
 
+/**
+ * Template for the Main layout
+ */
 export default class MainTemplate extends BasicTemplate {
     constructor() {
         super();
