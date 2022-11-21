@@ -86,7 +86,8 @@
                 </div>
                 <div class="flex-1 flex items-center justify-center">
                     <p class="w-9/12 py-5 text-primary text-center text-base">
-                        Single executable file exposing the current slide deck
+                        Single executable file, working without an internet
+                        connection
                     </p>
                 </div>
             </div>
