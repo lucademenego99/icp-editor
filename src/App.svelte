@@ -10,8 +10,11 @@
 	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
     import Overview from "./lib/modals/Overview.svelte";
 	import Help from "./lib/modals/Help.svelte";
+    import Export from "./lib/modals/Export.svelte";
 
 	import { darkTheme } from "./stores";
+    import SelfHosting from "./lib/modals/SelfHosting.svelte";
+    import Exporting from "./lib/modals/Exporting.svelte";
 
 	$: dark = $darkTheme
 
@@ -29,6 +32,9 @@
 		<Editor />
 		<Overview />
 		<Help />
+		<Export />
+		<Exporting />
+		<SelfHosting />
 	</div>
 </main>
 

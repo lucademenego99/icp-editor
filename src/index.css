@@ -4,7 +4,7 @@
 
 @layer base {
     .text-primary {
-        @apply text-primary-light dark:text-primary-dark;
+        @apply text-black dark:text-white;
     }
 
     .bg-primary {

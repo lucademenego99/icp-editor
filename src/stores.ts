@@ -35,7 +35,7 @@ export const currentSlideV: Writable<number> = writable(0);
 /**
  * Current language selected by the user
  */
-export const currentLanguage: Writable<Language> = writable("typescript");
+export const currentLanguage: Writable<Language> = writable("python");
 
 /**
  * Name of the slide deck
@@ -50,4 +50,19 @@ export const showOverview: Writable<boolean> = writable(false);
 /**
  * Whether the help modal is active or not
  */
- export const showHelp: Writable<boolean> = writable(false);
+export const showHelp: Writable<boolean> = writable(false);
+
+/**
+ * Whether the export modal is active or not
+ */
+export const showExport: Writable<boolean> = writable(false);
+
+/**
+ * Whether the self-hosting modal is active or not
+ */
+export const showSelfHosting: Writable<boolean> = writable(false);
+
+/**
+ * Whether the loading modal when exporting is active or not
+ */
+export const showExportingLoading: Writable<boolean> = writable(false);

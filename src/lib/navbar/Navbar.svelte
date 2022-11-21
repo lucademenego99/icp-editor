@@ -3,7 +3,6 @@
     import LayoutBody from "./layouts/Layout-Body.svelte";
     import LayoutColumns from "./layouts/Layout-Columns.svelte";
     import { Layouts, LayoutsNames, type Language } from "../../types";
-    import { saveAs } from "file-saver";
 
     import {
         currentLanguage,
@@ -13,20 +12,10 @@
         RevealInstance,
         deckName,
         showHelp,
-        darkTheme
+        darkTheme,
+        showExport
     } from "../../stores";
-    import Exporting from "../modals/Exporting.svelte";
-    import Arrow from "../icons/Arrow.svelte";
     import { Slide } from "../../classes/Slide";
-    import JSZip from "jszip";
-    import revealCSS from "../../styles/reveal.css?inline";
-    import revealJS from "reveal.js/dist/reveal?raw";
-	import bloodCSS from "../../styles/blood.css?inline";
-    import whiteCSS from "../../styles/white.css?inline";
-	import customCSS from "../../styles/custom-styles.css?inline";
-	import bundle from 'icp-bundle/dist/base/full-offline.iife.js?raw';
-    import utilsZip from '../../assets/utils.zip?url';
-    import Exporter from "../../classes/Exporter";
     import Theme from "../icons/Theme.svelte";
 
     /**
@@ -58,66 +47,6 @@
     }
 
     /**
-     * Save the slides as a redbean single-file distributable web server
-     */
-    function saveSlidesRedbean() {
-        savingFileDialog = true;
-        Exporter.generateRedbean($revealSlides, $darkTheme, (event) => {
-            // Save the generated file
-            const blob = new Blob([event.data.generated.buffer], {
-                type: "application/zip",
-            });
-            savingFileDialog = false;
-            saveAs(blob, `${$deckName}.com`);
-        });
-    }
-
-    /**
-     * Save the slides as an HTML file
-     * @param {boolean} online - Whether the HTML file should be able to work without an internet connection
-     */
-    function exportHTML(online: boolean): void {
-        // Generate the HTML file
-        const blob = Exporter.generateHTML($revealSlides, online, $darkTheme);
-
-        // Save it
-        saveAs(blob, `${$deckName}.html`);
-    }
-
-    /**
-     * Allow the user to download a zip file containing all the requirements to make the slides work locally
-     * This is used when the user wants to export the slides for self-hosting
-     */
-    async function downloadRequirements() {
-        // Get the utils.zip file
-        const utils = await fetch(utilsZip);
-        const zip = await JSZip.loadAsync(utils.arrayBuffer());
-
-        // Add revealjs main script
-        zip.file("reveal.js", revealJS);
-
-        // Add revealjs css
-        zip.file("reveal.css", revealCSS);
-
-        // Add revealjs dark theme
-        zip.file("blood.css", bloodCSS);
-
-        // Add revealjs light theme
-        zip.file("white.css", whiteCSS);
-
-        // Add custom styles
-        zip.file("custom-style.css", customCSS);
-
-        // Add ICP bundle
-        zip.file("full-offline.iife.js", bundle);
-
-        // Generate the zip file and make the user download it
-        zip.generateAsync({ type: "blob" }).then((content) => {
-            saveAs(content, "icp-requirements.zip");
-        });
-    }
-
-    /**
      * Change the current default language. Calling this function will:
      * - change the default programming language used when creating a new slide
      * - change the programming language used in the current slide
@@ -139,7 +68,6 @@
     }
 </script>
 
-<Exporting show={savingFileDialog} />
 <nav class="flex flex-row items-center justify-between h-[30px] bg-primary text-black dark:text-white">
     <div class="flex flex-row items-center ml-2">
         <div
@@ -156,30 +84,8 @@
                     > -->
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
-                        on:click={() => exportHTML(true)}>Export for <strong>online</strong> use</button
+                        on:click={() => showExport.set(true)}>Export slides</button
                     >
-                    <button
-                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
-                        on:click={saveSlidesRedbean}>Export for <strong>offline</strong> use</button
-                    >
-                    <div class="group/exportserver flex">
-                        <button class="p-1 text-sm w-full text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9] flex flex-row justify-between items-center">
-                            <p class="text-sm">Export for <strong>server</strong></p>
-                            <Arrow width={10} height={10} customClass="rotate-[270deg]" />
-                        </button>
-                        <div class="w-0 overflow-hidden w-full text-sm text-black float-none text-left flex no-underline hover:bg-secondary hover:text-[#f9f9f9]">
-                            <div class="dropdown-content hidden translateX absolute left-0 m-0 bg-primary-light w-[170px] flex flex-col z-50 group-hover/exportserver:flex">
-                                <button
-                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
-                                    on:click={() => exportHTML(false)}>Export current slides</button
-                                > 
-                                <button
-                                    class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
-                                    on:click={downloadRequirements}>Download Requirements</button
-                                > 
-                            </div>
-                        </div>
-                    </div>
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={reset}>Reset slides</button
@@ -288,9 +194,5 @@
         grid-template-columns: repeat(2, 1fr);
         grid-column-gap: 0.6em;
         grid-row-gap: 0.6em;
-    }
-
-    .translateX {
-        transform: translateX(100%);
     }
 </style>

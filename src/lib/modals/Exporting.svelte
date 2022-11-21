@@ -1,14 +1,10 @@
 <script lang="ts">
     import Loading from "../icons/Loading.svelte";
-
-    /**
-     * @param {boolean} show - Whether the modal should be shown or not
-     */
-    export let show: boolean = false;
+    import { showExportingLoading } from "../../stores";
 </script>
 
 <div
-    class="transition-all absolute flex items-center justify-center top-0 left-0 w-full h-full bg-black/75 z-50 {show
+    class="transition-all absolute flex items-center justify-center top-0 left-0 w-full h-full bg-black/75 z-50 {$showExportingLoading
         ? 'opacity-100 pointer-events-all'
         : 'opacity-0 pointer-events-none'}"
 >
