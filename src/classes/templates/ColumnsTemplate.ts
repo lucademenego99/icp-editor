@@ -62,12 +62,12 @@ export default class ColumnsTemplate extends BasicTemplate {
         section.appendChild(this.buildTitle());
 
         const container = document.createElement('div');
-        container.style.width = "85%";
-        container.style.height = "70%";
+        container.style.width = "min(85vw, 170vh)";
+        container.style.height = "min(35vw, 70vh)";
         container.style.display = "flex";
         container.style.justifyContent = "space-around";
         container.style.alignItems = "center";
-        container.style.gap = "2.5%";
+        container.style.gap = "min(3vw, 6vh)";
 
         const column1 = this.buildColumn();
         const body1 = this.buildBody(this.column1.bodyType);

@@ -148,6 +148,8 @@ export default class Exporter {
                 Reveal.initialize({
                     // Display controls in the bottom right corner
                     controls: true,
+                    // Whether to show help when pressing ?
+                    help: false,
                     // Display a presentation progress bar
                     progress: true,
                     // Push each slide change to the browser history

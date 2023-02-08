@@ -20,18 +20,17 @@ export default class BasicTemplate {
     }
 
     /**
-     * Build the main body of a slidde
+     * Build the main body of a slide
      * @param bodyType which kind of element will the body contain
      * @returns Container element for the actual content
      */
-    buildBody(bodyType: Types): HTMLDivElement {
+    buildBody(bodyType: Types, isOverview: boolean = false): HTMLDivElement {
         const body = document.createElement('div');
-        body.style.width = '80%';
-        body.style.height = '80%';
+        body.style.width = isOverview ? '80%' : 'min(80vw, 160vh)';
+        body.style.height = isOverview ? '80%' : 'min(40vw, 80vh)';
         body.style.display = "flex";
         body.style.flexDirection = "column";
         body.style.overflow = "auto";
-        body.style.fontSize = "2rem";
         if (bodyType === Types.TEXT) {
             body.style.textAlign = "start";
         } else {
@@ -48,7 +47,7 @@ export default class BasicTemplate {
      * @param darkTheme if the dark theme is enabled
      * @returns Container with the code editor
      */
-    buildCode(codeText: string, language: Language, darkTheme: boolean): HTMLDivElement {
+    buildCode(codeText: string, language: Language, darkTheme: boolean, isOverview: boolean = false): HTMLDivElement {
         const container = document.createElement('div');
         container.style.width = "100%";
         container.style.height = "100%";
@@ -57,7 +56,7 @@ export default class BasicTemplate {
         code.setAttribute('contenteditable', 'true');
         code.setAttribute('code', codeText);
         code.setAttribute("theme", darkTheme ? "dark" : "light");
-        code.setAttribute('type', 'normal');
+        code.setAttribute('type', language == "p5" || language == "processing" ? 'vertical' : 'normal');
         code.style.height = "100%";
         code.style.width = "100%";
 
@@ -71,12 +70,12 @@ export default class BasicTemplate {
      * @param imageAlt alt text for the image
      * @returns image element
      */
-    buildImage(encodedImage: string, imageAlt: string): HTMLImageElement {
+    buildImage(encodedImage: string, imageAlt: string, isOverview: boolean = false): HTMLImageElement {
         const image = document.createElement('img');
         image.setAttribute('src', encodedImage);
         image.setAttribute('alt', imageAlt);
-        image.style.height = "100%";
-        image.style.width = "100%";
+        image.style.height = isOverview ? '100%' : "min(45vw, 80vh)";
+        image.style.width = isOverview ? '100%' : "min(80vw, 160vh)";
         image.style.objectFit = "contain";
         image.style.margin = "0";
         image.style.padding = "0";
@@ -88,12 +87,11 @@ export default class BasicTemplate {
      * @param text text to put inside the container
      * @returns Container with text inside it
      */
-    buildText(text: string): HTMLDivElement {
+    buildText(text: string, isOverview: boolean = false): HTMLDivElement {
         const container = document.createElement('div');
         container.style.width = "100%";
-        container.style.padding = "0 8%";
+        container.style.padding = isOverview ? '0 8%' : "0 min(2vw, 4vh)";
         container.style.boxSizing = "border-box";
-        container.style.fontSize = "25px !important";
         container.innerHTML = text;
         return container;
     }

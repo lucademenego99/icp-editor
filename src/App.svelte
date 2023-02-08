@@ -5,7 +5,7 @@
 	import revealCSS from "./styles/reveal.css?url";
 	import bloodCSS from "./styles/blood.css?url";
 	import whiteCSS from "./styles/white.css?url";
-	import customCSS from "./styles/custom-styles.css?url";
+	import customCSS from "./styles/editor.css?url";
 
 	import bundle from 'icp-bundle/dist/base/full.iife.js?url';
     import Overview from "./lib/modals/Overview.svelte";

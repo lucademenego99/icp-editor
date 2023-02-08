@@ -24,4 +24,4 @@ export enum Types {
 /**
  * All the available languages for code editors
  */
-export type Language = "python" | "java" | "javascript" | "typescript" | "sql";
+export type Language = "python" | "java" | "cpp" | "javascript" | "typescript" | "sql" | "p5" | "processing";

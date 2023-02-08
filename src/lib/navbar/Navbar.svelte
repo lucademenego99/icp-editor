@@ -158,7 +158,19 @@
                     >
                     <button
                         class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
+                        on:click={setCurrentLanguage}>Cpp</button
+                    >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
                         on:click={setCurrentLanguage}>Sql</button
+                    >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
+                        on:click={setCurrentLanguage}>P5</button
+                    >
+                    <button
+                        class="p-1 text-sm text-black float-none text-left no-underline hover:bg-secondary hover:text-[#f9f9f9]"
+                        on:click={setCurrentLanguage}>Processing</button
                     >
                 </div>
             </div>

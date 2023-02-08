@@ -43,6 +43,14 @@
                 code={template.code}
                 style="height: 100%; width: 100%;"
             />
+        {:else if template.language == "cpp"}
+            <cpp-editor
+                contenteditable="true"
+                theme={$darkTheme ? 'dark' : 'light'}
+                type="normal"
+                code={template.code}
+                style="height: 100%; width: 100%;"
+            />
         {:else if template.language == "typescript"}
             <typescript-editor
                 contenteditable="true"
@@ -64,6 +72,22 @@
                 contenteditable="true"
                 theme={$darkTheme ? 'dark' : 'light'}
                 type="normal"
+                code={template.code}
+                style="height: 100%; width: 100%;"
+            />
+        {:else if template.language == "p5"}
+            <p5-editor
+                contenteditable="true"
+                theme={$darkTheme ? 'dark' : 'light'}
+                type="vertical"
+                code={template.code}
+                style="height: 100%; width: 100%;"
+            />
+        {:else if template.language == "processing"}
+            <processing-editor
+                contenteditable="true"
+                theme={$darkTheme ? 'dark' : 'light'}
+                type="vertical"
                 code={template.code}
                 style="height: 100%; width: 100%;"
             />

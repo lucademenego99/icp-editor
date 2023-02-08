@@ -72,7 +72,7 @@ export default class BodyTemplate extends BasicTemplate {
      * @description This is used to show a general overview of all slides where the user can move them
      */
     getOverview(darkTheme: boolean): HTMLElement {
-        const overviewHTML = this.generateHtml(darkTheme);
+        const overviewHTML = this.generateHtml(darkTheme, true);
         // Set pointer events none to all children of section elements in overviewHTML
         this.disablePointerEventsOnAllChildren(overviewHTML);
         return overviewHTML;
@@ -84,20 +84,20 @@ export default class BodyTemplate extends BasicTemplate {
      * @returns {HTMLElement} HTML of the template
      * @description This is used to generate the HTML of the current template
      */ 
-    generateHtml(darkTheme: boolean): HTMLElement {
+    generateHtml(darkTheme: boolean, isOverview: boolean = false): HTMLElement {
         const section = document.createElement('section');
         section.appendChild(this.buildTitle());
 
-        const body = this.buildBody(this.bodyType);
+        const body = this.buildBody(this.bodyType, isOverview);
         switch (this.bodyType) {
             case Types.CODE:
-                body.appendChild(this.buildCode(this.code, this.language, darkTheme));
+                body.appendChild(this.buildCode(this.code, this.language, darkTheme, isOverview));
                 break;
             case Types.IMAGE:
-                body.appendChild(this.buildImage(this.encodedImage, this.imageAlt));
+                body.appendChild(this.buildImage(this.encodedImage, this.imageAlt, isOverview));
                 break;
             case Types.TEXT:
-                body.appendChild(this.buildText(this.text));
+                body.appendChild(this.buildText(this.text, isOverview));
                 break;
         }
         section.appendChild(body);
