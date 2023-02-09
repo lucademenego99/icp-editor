@@ -13,7 +13,8 @@
 }
 
 section {
-    width: min(100vw, 190vh) !important;
+    width: 100vw !important;
+    height: 100vh !important;
     display: flex !important;
     flex-direction: column;
     justify-content: center;
